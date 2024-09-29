@@ -1,4 +1,11 @@
+let currentAgendaId = 0
+
 export function createAgenda (name, description=null) {
+  // set id to next available and then increment for next agenda
+  const id = currentAgendaId++;
+
+  const getId = () => id;
+
   const getName = () => name;
   const updateName = (newName) => name = newName;
   
@@ -6,7 +13,7 @@ export function createAgenda (name, description=null) {
   const updateDescription = (newDescription) => description = newDescription;
 
   // Create general sub agenda for all tasks without sub agenda explicitly set
-  let subAgendas = [createSubAgenda("general")];
+  let subAgendas = [createSubAgenda("General")];
 
   const getSubAgendas = () => subAgendas;
   const addSubAgenda = (name) => {
@@ -33,13 +40,20 @@ export function createAgenda (name, description=null) {
     subAgenda.removeTask(task);                                              
   };
   
-  return { getName, updateName, getDescription, updateDescription, 
+  return { getId, getName, updateName, getDescription, updateDescription, 
     getTasks, addTask, removeTask, getSubAgendas, addSubAgenda,
     removeSubAgenda
    };
 }
 
+let currentSubAgendaId = 0;
+
 function createSubAgenda (name) {
+  // set id to next available and then increment for next sub agenda
+  const id = currentSubAgendaId++;
+
+  const getId = () => id;
+
   const getName = () => name;
   const updateName = (newName) => name = newName;
 
@@ -53,7 +67,7 @@ function createSubAgenda (name) {
     tasks.splice(tasks.indexOf(task), 1);                                             
   };
 
-  return { getName, updateName, getTasks, addTask, removeTask } ;
+  return { getId, getName, updateName, getTasks, addTask, removeTask } ;
 }
 
 // Is there an alternative here? A lot of functionality is repeated, however
