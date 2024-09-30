@@ -6,12 +6,8 @@ import { createAgenda } from "./agendas";
 
 agendas = [];
 
-function createNewAgenda ({name, description=null, subAgendas}) {
+function createNewAgenda (name, description=null) {
   const agenda = createAgenda(name, description);
-  // sub agenda names in array
-  for (let subAgendaName of subAgendas) {
-    agenda.addSubAgenda(subAgendaName);
-  }
 
   agendas.push(agenda);
 }
@@ -36,20 +32,8 @@ function editAgenda (agendaId, name, description) {
   agenda.updateDescription(description);
 }
 
-function getSubAgendaFromId (agendaId, subAgendaId) {
-  return getAgendaFromId(agendaId)
-          .getSubAgendas()
-            .find((subAgenda) => subAgenda.getId() === subAgendaId);
-}
-
-function editSubAgenda (agendaId, subAgendaId, name) {
-  const subAgenda = getSubAgendaFromId(agendaId, subAgendaId);
-
-  subAgenda.updateName(name);
-}
-
 function createNewTask ({title, description=null, dueDate=null,
-  priority=priorities.lowPriority, agendaId=null, subAgendaId=null}) {
+  priority=priorities.lowPriority, agendaId=null}) {
 
     const task = createTask({title, description, dueDate,
       priority});
@@ -57,11 +41,6 @@ function createNewTask ({title, description=null, dueDate=null,
     if (agendaId !== null) {
       const agenda = getAgendaFromId(agendaId);
       agenda.addTask(task);
-
-      if (subAgendaId !== null) {
-        const subAgenda = getSubAgendaFromId(agendaId, subAgendaId);
-        subAgenda.addTask(task);
-      }
     }
     
   }
