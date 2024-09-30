@@ -4,7 +4,7 @@ export const priorities = {lowPriority: "Low Priority", important: "Important",
 let currentTaskId = 0;
 
 export function createTask ({title, description=null, dueDate=null,
-  priority=priorities.lowPriority, checklist=[]}) {
+  priority=priorities.lowPriority}) {
 
   // set id to next available and then increment for next task
   const id = currentTaskId++;
@@ -23,11 +23,6 @@ export function createTask ({title, description=null, dueDate=null,
 
   const getPriority = () =>  priority;
   const updatePriority = (newPriority) => priority = newPriority;
-
-  const getChecklist = () => checklist;
-  const addToChecklist = (itemTitle) => checklist.push({title: itemTitle, completed: false});
-  const removeFromChecklist = (item) => checklist.splice(checklist.indexOf(item), 1);
-  const completeChecklistItem = (item) => item.completed = true;
 
   let completed = false;
 
