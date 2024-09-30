@@ -30,8 +30,7 @@ export function createTask ({title, description=null, dueDate=null,
   const completeTask = () => completed = true;
 
   return { getId, getTitle, updateTitle, getDescription, updateDescription,
-    getDueDate, updateDueDate, getPriority, updatePriority, getChecklist,
-    addToChecklist, removeFromChecklist, completeChecklistItem,
-    getCompletionStatus, completeTask
+    getDueDate, updateDueDate, getPriority, updatePriority, getCompletionStatus,
+    completeTask
    };
 }
