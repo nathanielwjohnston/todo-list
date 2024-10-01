@@ -23,3 +23,24 @@
   p, h1, h2, h3, h4, h5, h6 {
     overflow-wrap: break-word;
   }
+
+/* ==========================================================================
+  General
+  ========================================================================== */
+
+/* Colour Palette */
+
+* {
+  --purple: #94618E;
+  --dark-purple: #49274A;
+  --peach: #F4decb;
+  --off-white: #F8EEE7;
+}
+
+/* Font Stack */
+/* https://modernfontstacks.com/ */
+
+body {
+  font-family: Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans',
+  source-sans-pro, sans-serif;
+}
