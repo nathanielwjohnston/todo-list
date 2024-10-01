@@ -35,6 +35,10 @@
   --dark-purple: #49274A;
   --peach: #F4decb;
   --off-white: #F8EEE7;
+  --priority-urgent: #b91c1c;
+  --priority-important: #c2410c;
+  --priority-low-priority: #f59e0b;
+  --task-completed: #0284c7;
 }
 
 /* Font Stack */
