@@ -4,7 +4,11 @@ import { createAgenda } from "./agendas";
 /* The display controller will be using these functions for information.
    Therefore, the input will be mostly id-based */
 
-agendas = [];
+const agendas = [];
+
+function getAgendas () {
+  return agendas;
+} 
 
 function createNewAgenda (name, description=null) {
   const agenda = createAgenda(name, description);
@@ -32,8 +36,8 @@ function editAgenda (agendaId, name, description) {
   agenda.updateDescription(description);
 }
 
-function createNewTask ({title, description=null, dueDate=null,
-  priority=priorities.lowPriority, agendaId=null}) {
+function createNewTask (title, agendaId, {description=null, dueDate=null,
+  priority=priorities.lowPriority}) {
 
     const task = createTask({title, description, dueDate,
       priority});
@@ -68,3 +72,7 @@ function removeTaskFromAgenda (agendaId, taskId) {
 
   agenda.removeTask(task);
 }
+
+export { getAgendas, createNewAgenda, removeAgenda, getAgendaFromId, editAgenda,
+  createNewTask, getTaskFromId, editTask, removeTaskFromAgenda
+ }
