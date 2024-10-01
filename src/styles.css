@@ -44,3 +44,34 @@ body {
   font-family: Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans',
   source-sans-pro, sans-serif;
 }
+
+#main {
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  grid-template-rows: 1fr;
+}
+
+#main * {
+  border: 1px solid;
+}
+
+/* ==========================================================================
+  Sidebar
+  ========================================================================== */
+
+/* ==========================================================================
+  Content
+  ========================================================================== */
+
+#content {
+  padding: 3rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
+}
+
+#task-list, #expanded-task-details {
+  margin: 1rem;
+}
