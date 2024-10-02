@@ -15,7 +15,7 @@ export function createAgenda (name, description=null) {
   let tasks = [];
 
   const getTasks = () => tasks;
-  const addTask = (task, subAgenda=null) => {
+  const addTask = (task) => {
     tasks.push(task);
   };
   const removeTask = (task) => {
