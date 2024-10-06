@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+ <g class="layer">
+  <title>Layer 1</title>
+  <path d="m11,9l2,0l0,-2l-2,0m1,13c-4.41,0 -8,-3.59 -8,-8c0,-4.41 3.59,-8 8,-8c4.41,0 8,3.59 8,8c0,4.41 -3.59,8 -8,8m0,-18a10,10 0 0 0 -10,10a10,10 0 0 0 10,10a10,10 0 0 0 10,-10a10,10 0 0 0 -10,-10m-1,15l2,0l0,-6l-2,0l0,6z" fill="#ebdac8" id="svg_1"/>
+ </g>
+</svg>

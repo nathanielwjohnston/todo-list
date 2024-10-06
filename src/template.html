@@ -8,11 +8,103 @@
 <body>
   <div id="main">
     <div id="sidebar">
-      
+      <div id="agenda-list-container">
+        <h2>Agendas</h2>
+        <ul id="agenda-list">
+          <!-- Max 9 agendas - to get more upgrade to premium -->
+          <li class="agenda-item">
+            <h3>Examples</h3>
+            <span class="agenda-edit-button"></span>
+            <span class="agenda-delete-button"></span>
+          </li>
+          <li class="agenda-item">
+            <h3>Examples</h3>
+            <span class="agenda-edit-button"></span>
+            <span class="agenda-delete-button"></span>
+          </li>
+          <li class="agenda-item">
+            <h3>Examples</h3>
+            <span class="agenda-edit-button"></span>
+            <span class="agenda-delete-button"></span>
+          </li>
+        </ul>
+      </div>
+      <div id="add-agenda-container"><button id="add-agenda">New Agenda</button></div>
     </div>
-    <div id="content">
-      <div id="task-list"></div>
-      <div id="expanded-task-details"></div>
+    <div id="tasks">
+      <div id="agenda-header">
+        <h1>Example</h1>
+        <!-- Need description character limit -->
+        <p id="agenda-description">
+          This is an example description for a possible agenda.
+        </p>
+        <div id="priorities-key">
+          <h4>Priorities:</h4>
+          <ul id="priorities-key-list">
+            <li class="priorites-key-item" id="urgent-priority-key">U - Urgent</li>
+            <li class="priorites-key-item" id="important-priority-key">I - Important</li>
+            <li class="priorites-key-item" id="low-priority-key">L - Low</li>
+          </ul>
+        </div>
+        <hr>
+      </div>
+      <div id="task-list-container">
+        <ul id="task-list">
+          <li class="task-item completed">
+            <div>
+              <span class="task-priority urgent">U</span>
+              <span class="task-check-container">
+                <input type="checkbox" class="task-check">
+              </span>
+              <span class="task-title">This is a task title</span>
+              <span class="task-due-date">12th Feb</span>
+              <span class="task-details-button">Details</span>
+              <span class="task-edit-button"></span>
+              <span class="task-delete-button"></span>
+            </div>
+          </li>
+          <li class="task-item">
+            <div>
+              <span class="task-priority important">I</span>
+              <span class="task-check-container">
+                <input type="checkbox" class="task-check">
+              </span>
+              <span class="task-title">This is a task title</span>
+              <span class="task-due-date">12th Feb</span>
+              <span class="task-details-button">Details</span>
+              <span class="task-edit-button"></span>
+              <span class="task-delete-button"></span>
+            </div>
+          </li>
+          <li class="task-item">
+            <div>
+              <span class="task-priority low">L</span>
+              <span class="task-check-container">
+                <input type="checkbox" class="task-check">
+              </span>
+              <span class="task-title">This is a task title</span>
+              <span class="task-due-date">12th Feb</span>
+              <span class="task-details-button">Details</span>
+              <span class="task-edit-button"></span>
+              <span class="task-delete-button"></span>
+            </div>
+          </li>
+          <li class="expanded-task-item">
+            <div>
+              <span class="task-check-container">
+                <input type="checkbox" class="task-check">
+              </span>
+              <span class="task-title">This is a task title</span>
+              <span class="task-description">This is a task description</span>
+              <span class="task-due-date">12th Feb</span>
+              <span class="task-priority low"></span>
+              <span class="task-edit-button"></span>
+              <span class="task-delete-button"></span>
+            </div>
+          </li>
+        </ul>
+        <div id="add-task-container"><button id="add-task">New Task</button></div>
+      </div>
     </div>
   </div>
 </body>

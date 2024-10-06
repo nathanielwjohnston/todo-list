@@ -33,49 +33,349 @@
 * {
   --purple: #94618E;
   --dark-purple: #49274A;
-  --peach: #F4decb;
+  --peach: #EBDAC8;
   --off-white: #F8EEE7;
+  --brown: #261e19;
   --priority-urgent: #b91c1c;
   --priority-important: #c2410c;
   --priority-low-priority: #f59e0b;
   --task-completed: #0284c7;
 }
 
+/* https://www.fontsquirrel.com/fonts/roboto */
+
+@font-face {
+  font-family: "Roboto";
+  src: url("../assets/Roboto-Bold.ttf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* Font Stack */
 /* https://modernfontstacks.com/ */
 
 body {
-  font-family: Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans',
-  source-sans-pro, sans-serif;
+  font-family: "Roboto", Optima, Candara, 'Noto Sans', source-sans-pro, sans-serif;
 }
 
-#main {
+/* Content */
+
+body {
   height: 100vh;
   width: 100vw;
   display: grid;
-  grid-template-columns: 1fr 4fr;
-  grid-template-rows: 1fr;
+  justify-items: center;
+  align-items: center;
+  background-color: var(--dark-purple);
 }
 
-#main * {
-  border: 1px solid;
+#main {
+  height: 75vh;
+  width: 60vw;
+  display: grid;
+  grid-template-columns: 1fr 3.5fr;
+  background-color: var(--peach);
+  border-radius: 0.2rem;
+  padding: 1em;
 }
 
 /* ==========================================================================
   Sidebar
   ========================================================================== */
 
+#sidebar {
+  padding: 0.6em;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.2rem;
+  background-color: var(--purple);
+}
+
+#agenda-list-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+}
+
+#agenda-list-container h2 {
+  font-size: 2em;
+  color: var(--peach);
+}
+
+#agenda-list {
+  flex: 1;
+  list-style-type: none;
+  margin-bottom: 1em;
+  color: var(--brown);
+}
+
+/* Agenda Items */
+
+.agenda-item {
+  margin-bottom: 1em;
+  padding: 0.2em;
+  background-color: var(--peach);
+  display: flex;
+  align-items: center;
+  gap: 0.1em;
+}
+
+.agenda-item h3 {
+  flex: 1;
+}
+
+.agenda-edit-button {
+  background-image: url(../assets/pencil-outline.svg);
+}
+
+.agenda-delete-button {
+  background-image: url(../assets/delete-outline.svg);
+}
+
+.agenda-edit-button, .agenda-delete-button {
+  background-repeat: no-repeat;
+  height: 1.2em;
+  width: 1.2em;
+}
+
+.agenda-item, #add-agenda {
+  font-size: 1.2em;
+  height: 2.2em;
+  width: 11em;
+  border-radius: 0.2rem;
+  border: none;
+}
+
+#add-agenda-container {
+  display: grid;
+  justify-items: center;
+}
+
+#add-agenda {
+  background-color: var(--dark-purple);
+  color: var(--peach);
+}
+
 /* ==========================================================================
-  Content
+  Tasks
   ========================================================================== */
 
-#content {
-  padding: 3rem;
+#tasks {
+  background-color: var(--peach);
+  border-radius: 0.2rem;
+  padding: 1em;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: 1fr;
+  grid-template-rows: 1fr 4fr;
 }
 
-#task-list, #expanded-task-details {
-  margin: 1rem;
+/* Header */
+
+#agenda-header {
+  color: var(--brown);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr auto auto;
 }
+
+#agenda-header h1 {
+  font-size: 3em;
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+}
+
+#agenda-description {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+}
+
+#priorities-key {
+  grid-column: 2 / 3;
+  grid-row: 1 / end;
+  place-self: center;
+  display: grid;
+}
+
+#priorities-key-list {
+  list-style-type: none;
+}
+
+#urgent-priority-key {
+  color: var(--priority-urgent);
+}
+
+#important-priority-key {
+  color: var(--priority-important);
+}
+
+#low-priority-key {
+  color: var(--priority-low-priority);
+}
+
+#tasks hr {
+  border-color: var(--brown);
+  grid-column: 1 / end;
+  grid-row: 3 / 4;
+}
+
+/* Task List */
+
+#task-list-container {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+}
+
+#task-list {
+  flex: 1;
+  list-style-type: none;
+  overflow-y: scroll;
+  padding: 0 1em;
+}
+
+/* Task Items */
+
+.task-item, .expanded-task-item {
+  height: 3.5em;
+  border-radius: 0.2rem;
+  margin-bottom: 1em;
+  background-color: var(--purple);
+  color: var(--peach);
+}
+
+.expanded-task-item {
+  height: 8em;
+}
+
+.task-item.completed {
+  opacity: 0.5;
+}
+
+.task-item div {
+  height: 100%;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  grid-template-columns: 0.4fr 0.6fr 6fr repeat(2, 1.2fr) repeat(2, 0.4fr);
+  padding: 0 1em 0 0;
+}
+
+/* Task Item Children */
+
+.task-check-container {
+  display: grid;
+  align-items: center;
+}
+
+/* Checkbox from https://moderncss.dev/pure-css-custom-checkbox-style/ */
+
+.task-check {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: 1.15em;
+  height: 1.15em;
+  border: 0.15em solid var(--dark-purple);
+  border-radius: 0.2rem;
+  display: grid;
+  place-content: center;
+}
+
+.task-check::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--dark-purple);
+  background-color: CanvasText;
+  
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.task-check:checked::before {
+  transform: scale(1);
+}
+
+input[type="checkbox"]:focus {
+  outline: max(2px, 0.15em) solid currentColor;
+  outline-offset: max(2px, 0.15em);
+}
+
+/* ========== */
+
+.task-title {
+  width: 100%;
+  padding: 0 1em 0 0;
+  text-align: left;
+}
+
+.task-item.completed .task-title {
+  text-decoration: line-through;
+}
+
+/* ========== */
+
+.task-edit-button {
+  background-image: url(../assets/pencil-outline-white.svg);
+}
+
+/* ========== */
+
+.task-delete-button {
+  background-image: url(../assets/delete-outline-white.svg);
+}
+
+/* ========== */
+
+.task-edit-button, .task-delete-button {
+  background-repeat: no-repeat;
+  height: 1.5em;
+  width: 1.5em;
+}
+
+/* ========== */
+
+.task-priority {
+  border-radius: 0.2rem 0 0 0.2rem ;
+  width: 100%;
+  height: 100%;
+  color: var(--peach);
+  display: grid;
+  place-content: center;
+}
+
+.task-priority.urgent {
+  background-color: var(--priority-urgent);
+}
+
+.task-priority.important {
+  background-color: var(--priority-important);
+}
+
+.task-priority.low {
+  background-color: var(--priority-low-priority);
+}
+
+/* ========== */
+
+#add-task-container {
+  display: grid;
+  justify-items: center;
+}
+
+#add-task {
+  font-size: 1.2em;
+  height: 2.2em;
+  width: 11em;
+  border-radius: 0.2rem;
+  border: none;
+  background-color: var(--dark-purple);
+  color: var(--peach);
+}
+
+/* ========== */
