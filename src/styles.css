@@ -122,6 +122,22 @@ body {
   gap: 0.1em;
 }
 
+.agenda-item:hover {
+  background-color: var(--off-white);
+  cursor: pointer;
+  outline: 1px solid var(--brown);
+}
+
+.current-agenda {
+  background-color: var(--dark-purple);
+  color: var(--peach);
+}
+
+.agenda-item.current-agenda:hover {
+  background-color: var(--dark-purple);
+  outline-color: var(--off-white);
+}
+
 .agenda-item h3 {
   flex: 1;
 }
@@ -130,8 +146,24 @@ body {
   background-image: url(../assets/pencil-outline.svg);
 }
 
+.current-agenda .agenda-edit-button {
+  background-image: url(../assets/pencil-outline-white.svg);
+}
+
+.agenda-edit-button:hover {
+  background-image: url(../assets/pencil-outline-blue.svg);
+}
+
+.current-agenda .agenda-delete-button {
+  background-image: url(../assets/delete-outline-white.svg);
+}
+
 .agenda-delete-button {
   background-image: url(../assets/delete-outline.svg);
+}
+
+.agenda-delete-button:hover {
+  background-image: url(../assets/delete-outline-red.svg);
 }
 
 .agenda-edit-button, .agenda-delete-button {

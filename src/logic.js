@@ -8,7 +8,7 @@ const defaultAgenda = createAgenda();
 
 const agendas = [defaultAgenda];
 
-let currentAgenda;
+let currentAgenda = agendas[0];
 
 function getAgendas () {
   return agendas;
@@ -26,7 +26,7 @@ function createNewAgenda (name, description=null) {
 
 function removeAgenda (agendaId) {
   // get specified agenda
-  const agenda = agendas.find((agenda) => agenda.getId() === agendaId);
+  const agenda = getAgendaFromId(agendaId);
   // remove from agendas array
   agendas.splice(agendas.indexOf(agenda), 1);
 }
@@ -40,7 +40,8 @@ function updateCurrentAgenda (newCurrentAgenda) {
 }
 
 function getAgendaFromId (agendaId) {
-  return agendas.find((agenda) => agenda.getId() === agendaId);
+  const id = parseInt(agendaId);
+  return agendas.find((agenda) => agenda.getId() === id);
 }
 
 // to edit the base parameters of an agenda i.e. name and description
@@ -58,10 +59,8 @@ function createNewTask (title, agendaId, {description=null, dueDate=null,
     const task = createTask({title, description, dueDate,
       priority});
     
-    if (agendaId !== null) {
-      const agenda = getAgendaFromId(agendaId);
-      agenda.addTask(task);
-    }
+    const agenda = getAgendaFromId(agendaId);
+    agenda.addTask(task);
     
   }
 

@@ -29,17 +29,13 @@ function createAgendaElement (agenda) {
     listItem.appendChild(element);
   }
 
-  // Event listener to select an agenda for viewing
-
-  listItem.addEventListener("click", () => {
-    viewAgenda(agenda);
-  })
-
   agendaList.appendChild(listItem);
   
 }
 
 function createTaskElement (task) {
+
+  // TODO: add id to data attribute
   const taskList = document.querySelector("#task-list");
 
   const listItem = document.createElement("li");
@@ -112,33 +108,44 @@ function createTaskElement (task) {
 }
 
 // Switches to an agenda
-function viewAgenda (agenda) {
+function viewAgenda (agenda, firstLoad = false) {
   // Check agenda is not already showing
-  if (agenda === logic.getCurrentAgenda()) {
+  if (agenda === logic.getCurrentAgenda() && firstLoad === false) {
     return;
   }
-  // TODO: select agenda in sidebar (using CSS)
-
 
   const header = document.querySelector("#agenda-header");
-  // change header title
+  // Change header title
   const headerTitle = header.querySelector("h1");
   headerTitle.textContent = agenda.getName();
-  // change description
+  // Change description
   const headerDescription = header.querySelector("#agenda-description");
   headerDescription.textContent = agenda.getDescription();
-  // change tasks
+  // Change tasks
   const taskList = document.querySelector("#task-list");
-    // clear tasks
+    // Clear tasks
   taskList.replaceChildren();
 
   const tasks = agenda.getTasks();
   for (let task of tasks) {
-    // creates task and appends it to task list
+    // Creates task and appends it to task list
     createTaskElement(task);
   }
 
+  // Update current agenda
+
+  // Deselect agenda in sidebar
+  const currentAgenda = logic.getCurrentAgenda();
+  const currentAgendaElement = document
+    .querySelector(`[data-agenda-id="${currentAgenda.getId()}"]`);
+  currentAgendaElement.classList.remove("current-agenda");
+
   logic.updateCurrentAgenda(agenda);
+  // Select agenda in sidebar (using CSS)
+  const newCurrentAgendaElement = document
+    .querySelector(`[data-agenda-id="${agenda.getId()}"]`);
+  newCurrentAgendaElement.classList.add("current-agenda");
+
 }
 
 function loadPage () {
@@ -150,10 +157,28 @@ function loadPage () {
     createAgendaElement(agenda);
   }
 
+  // Event listener to manipulate agendas (view, edit, delete)
+  const agendaList = document.querySelector("#agenda-list");
+  agendaList.addEventListener("click", (e) => {
+    if (e.target.classList.contains("agenda-item")) {
+      const agenda = logic.getAgendaFromId(e.target.dataset.agendaId);
+      console.log(e.target.dataset.agendaId);
+      viewAgenda(agenda);
+    } else if (e.target.nodeName === "H3") {
+      const agenda = logic.getAgendaFromId(e.target.parentElement.dataset.agendaId);
+      viewAgenda(agenda);
+    } else if (e.target.classList.contains("agenda-edit-button")) {
+      // view and edit agenda
+    } else if (e.target.classList.contains("agenda-delete-button")) {
+      // show confirmation modal
+      // delete if accepted
+    }
+  })
+
   // Load an agenda (info and tasks)
   // May need to eventually change this to current agenda when storing the info,
   // however viewAgenda will need changed as it doesn't accept current agenda
-  viewAgenda(logic.getAgendas()[0]);
+  viewAgenda(logic.getAgendas()[0], true);
 
   // Event Listeners for task and agenda creation buttons
 
