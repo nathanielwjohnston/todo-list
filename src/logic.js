@@ -4,18 +4,24 @@ import { createAgenda } from "./agendas";
 /* The display controller will be using these functions for information.
    Therefore, the input will be mostly id-based */
 
-const defaultAgenda = createAgenda("New Agenda");
+const defaultAgenda = createAgenda();
 
 const agendas = [defaultAgenda];
+
+let currentAgenda;
 
 function getAgendas () {
   return agendas;
 } 
 
 function createNewAgenda (name, description=null) {
+  // Add 9 agenda limit
+
   const agenda = createAgenda(name, description);
 
   agendas.push(agenda);
+
+  return agenda;
 }
 
 function removeAgenda (agendaId) {
@@ -23,6 +29,14 @@ function removeAgenda (agendaId) {
   const agenda = agendas.find((agenda) => agenda.getId() === agendaId);
   // remove from agendas array
   agendas.splice(agendas.indexOf(agenda), 1);
+}
+
+function getCurrentAgenda () {
+  return currentAgenda;
+}
+
+function updateCurrentAgenda (newCurrentAgenda) {
+  currentAgenda = newCurrentAgenda;
 }
 
 function getAgendaFromId (agendaId) {
@@ -75,6 +89,7 @@ function removeTaskFromAgenda (agendaId, taskId) {
   agenda.removeTask(task);
 }
 
-export { getAgendas, createNewAgenda, removeAgenda, getAgendaFromId, editAgenda,
-  createNewTask, getTaskFromId, editTask, removeTaskFromAgenda
+export { getAgendas, createNewAgenda, removeAgenda, getCurrentAgenda,
+  updateCurrentAgenda, getAgendaFromId, editAgenda, createNewTask,
+  getTaskFromId, editTask, removeTaskFromAgenda
  }
