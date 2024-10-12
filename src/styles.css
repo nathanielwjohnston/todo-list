@@ -138,6 +138,11 @@ body {
   outline-color: var(--off-white);
 }
 
+.current-agenda.agenda-editing {
+  outline: double var(--off-white);
+  outline-width: 0.3em;
+}
+
 .agenda-item h3 {
   flex: 1;
 }
@@ -166,7 +171,24 @@ body {
   background-image: url(../assets/delete-outline-red.svg);
 }
 
-.agenda-edit-button, .agenda-delete-button {
+.agenda-edit-save-button {
+  background-image: url(../assets/edit-save.svg);
+}
+
+.agenda-edit-save-button:hover {
+  background-image: url(../assets/edit-save-blue.svg);
+  }
+
+.agenda-edit-cancel-button {
+  background-image: url(../assets/cancel-edit.svg);
+}
+
+.agenda-edit-cancel-button:hover {
+  background-image: url(../assets/cancel-edit-red.svg);
+  }
+
+.agenda-edit-button, .agenda-delete-button, .agenda-edit-save-button,
+.agenda-edit-cancel-button {
   background-repeat: no-repeat;
   height: 1.2em;
   width: 1.2em;
@@ -188,6 +210,12 @@ body {
 #add-agenda {
   background-color: var(--dark-purple);
   color: var(--peach);
+}
+
+#add-agenda:hover {
+  background-color: var(--peach);
+  color: var(--brown);
+  cursor: pointer;
 }
 
 /* ==========================================================================
@@ -215,6 +243,26 @@ body {
   font-size: 3em;
   grid-column: 1 / 2;
   grid-row: 1 / 2;
+}
+
+#agenda-header h1.agenda-child-editing, #agenda-description.agenda-child-editing {
+  outline: 1px solid;
+}
+
+#agenda-header h1.agenda-child-editing {
+  width: 20ch;
+}
+
+#agenda-description.agenda-child-editing {
+  width: 60ch;
+}
+
+#agenda-header h1.agenda-child-editing.max-characters::after,
+#agenda-description.agenda-child-editing.max-characters::after {
+  content: "Max. characters";
+  font-size: 1rem;
+  position: absolute;
+  color: red;
 }
 
 #agenda-description {
@@ -408,6 +456,11 @@ input[type="checkbox"]:focus {
   border: none;
   background-color: var(--dark-purple);
   color: var(--peach);
+}
+
+#add-task:hover {
+  cursor: pointer;
+  background-color: var(--purple);
 }
 
 /* ========== */

@@ -13,7 +13,8 @@ function createAgendaElement (agenda) {
   listItem.dataset.agendaId = agendaId;
 
   const heading = document.createElement("h3");
-  const headingText = document.createTextNode(`${agenda.getName()}`);
+  heading.classList.add("agenda-name");
+  const headingText = document.createTextNode(`${agenda.getName()}`);;
   heading.appendChild(headingText);
   elements.push(heading);
 
@@ -148,6 +149,94 @@ function viewAgenda (agenda, firstLoad = false) {
 
 }
 
+function startAgendaEdit (agenda) {
+  const sidebarElement = document.querySelector(".current-agenda");
+  // change sidebar icons
+  const firstIcon = sidebarElement.querySelector(".agenda-edit-button");
+  const secondIcon = sidebarElement.querySelector(".agenda-delete-button");
+
+  firstIcon.classList.remove("agenda-edit-button");
+  firstIcon.classList.add("agenda-edit-save-button");
+
+  secondIcon.classList.remove("agenda-delete-button");
+  secondIcon.classList.add("agenda-edit-cancel-button");
+
+  // make agenda properties editable
+  const agendaHeader = document.querySelector("#agenda-header");
+  const heading = agendaHeader.querySelector("h1");
+  const description = agendaHeader.querySelector("#agenda-description");
+
+  heading.setAttribute("contenteditable", true);
+  heading.classList.add("agenda-child-editing");
+  heading.focus();
+  description.setAttribute("contenteditable", true);
+  description.classList.add("agenda-child-editing");
+
+  function agendaPropertyTyping(e, element, maxChars) {
+    const key = e.key;
+
+    if (
+      element.textContent.length === maxChars &&
+      key !== "Backspace"
+    ) {
+      e.preventDefault();
+      element.classList.add("max-characters");
+    }
+
+    if (
+      element.textContent.length === maxChars &&
+      key === "Backspace" &&
+      element.classList.contains("max-characters")
+    ) {
+      element.classList.remove("max-characters");
+    } else if (key === "Enter") {
+      e.preventDefault();
+    }
+  }
+
+  heading.addEventListener("keydown", e => agendaPropertyTyping(e, heading, 14))
+  description.addEventListener("keydown", e => agendaPropertyTyping(e, description, 50))
+}
+
+function finishAgendaEdit (agenda, saving=false) {
+  const sidebarElement = document.querySelector(".current-agenda");
+  // change sidebar icons
+  const firstIcon = sidebarElement.querySelector(".agenda-edit-save-button");
+  const secondIcon = sidebarElement.querySelector(".agenda-edit-cancel-button");
+
+  firstIcon.classList.remove("agenda-edit-save-button");
+  firstIcon.classList.add("agenda-edit-button");
+
+  secondIcon.classList.remove("agenda-edit-cancel-button");
+  secondIcon.classList.add("agenda-delete-button");
+
+
+  const agendaHeader = document.querySelector("#agenda-header");
+  const heading = agendaHeader.querySelector("h1");
+  const description = agendaHeader.querySelector("#agenda-description");
+
+  heading.setAttribute("contenteditable", false);
+  heading.classList.remove("agenda-child-editing");
+  description.setAttribute("contenteditable", false);
+  description.classList.remove("agenda-child-editing");
+
+  if (saving) {
+    // need to rethink some of these logic functions, using an agenda function
+    // for the purpose of using a logic function to use more agenda functions
+    // seems silly. Logic should really be the middle point, ui probably shoudln't
+    // be using agenda or task functions at all. 
+
+    // Just need to pass the id throughout ui and let the logic functions do the work
+    logic.editAgenda(agenda.getId(), heading.textContent, description.textContent)
+    const sidebarAgenda = document.querySelector(".current-agenda");
+    const agendaHeading = sidebarAgenda.querySelector("h3");
+    agendaHeading.textContent = heading.textContent;
+  } else {
+    heading.textContent = agenda.getName();
+    description.textContent = agenda.getDescription();
+  }
+}
+
 function loadPage () {
   // Load agendas
 
@@ -160,18 +249,42 @@ function loadPage () {
   // Event listener to manipulate agendas (view, edit, delete)
   const agendaList = document.querySelector("#agenda-list");
   agendaList.addEventListener("click", (e) => {
-    if (e.target.classList.contains("agenda-item")) {
-      const agenda = logic.getAgendaFromId(e.target.dataset.agendaId);
-      console.log(e.target.dataset.agendaId);
-      viewAgenda(agenda);
-    } else if (e.target.nodeName === "H3") {
-      const agenda = logic.getAgendaFromId(e.target.parentElement.dataset.agendaId);
-      viewAgenda(agenda);
-    } else if (e.target.classList.contains("agenda-edit-button")) {
-      // view and edit agenda
-    } else if (e.target.classList.contains("agenda-delete-button")) {
-      // show confirmation modal
-      // delete if accepted
+    // might not need agenda in some of these functions !!!
+    const classes = {
+      "agenda-item":() => {
+        const agenda = logic.getAgendaFromId(e.target.dataset.agendaId);
+        viewAgenda(agenda);
+      },
+      "agenda-name":() => {
+        const agenda = logic.getAgendaFromId(e.target.parentElement.dataset.agendaId);
+        viewAgenda(agenda);
+      },
+      "agenda-edit-button":() => {
+        const agenda = logic.getAgendaFromId(e.target.parentElement.dataset.agendaId);
+        viewAgenda(agenda);
+        startAgendaEdit(agenda);
+      },
+      "agenda-delete-button":() => {
+        const agenda = logic.getAgendaFromId(e.target.parentElement.dataset.agendaId);
+        viewAgenda(agenda);
+        // show confirmation modal
+        // delete if accepted
+      },
+      "agenda-edit-save-button":() => {
+        const agenda = logic.getAgendaFromId(e.target.parentElement.dataset.agendaId);
+        finishAgendaEdit(agenda, true);
+      },
+      "agenda-edit-cancel-button":() => {
+        const agenda = logic.getAgendaFromId(e.target.parentElement.dataset.agendaId);
+        finishAgendaEdit(agenda);
+      }
+    };
+
+    for (let specificClass in classes) {
+      if (e.target.classList.contains(specificClass)) {
+        classes[specificClass]();
+        break;
+      }
     }
   })
 
