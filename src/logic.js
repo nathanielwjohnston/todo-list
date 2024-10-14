@@ -62,7 +62,8 @@ function createNewTask (title, agendaId, {description=null, dueDate=null,
     const agenda = getAgendaFromId(agendaId);
     agenda.addTask(task);
     
-  }
+  return task;
+}
 
 function getTaskFromId (agendaId, taskId) {
   const agenda = getAgendaFromId(agendaId);

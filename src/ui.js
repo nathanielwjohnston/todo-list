@@ -42,11 +42,11 @@ function createTaskElement (task) {
   const listItem = document.createElement("li");
   listItem.classList.add("task-item");
 
-  elements = [];
+  let elements = [];
 
   const priorityIndicator = document.createElement("span");
   const priority = task.getPriority();
-  priorityIndicator.classList.add("task-priority", `${priority}`);
+  priorityIndicator.classList.add("task-priority", `${priority.toLowerCase()}`);
   const priorityIndicatorText = document.createTextNode(
     `${priority.slice(0,1).toUpperCase()}`
   );
@@ -71,29 +71,29 @@ function createTaskElement (task) {
 
   // Split into separate function?
 
-  const title = document.createElememt("span");
+  const title = document.createElement("span");
   title.classList.add("task-title");
   const titleText = document.createTextNode(`${task.getTitle()}`);
   title.appendChild(titleText);
   elements.push(title);
 
-  const dueDate = document.createElememt("span");
+  const dueDate = document.createElement("span");
   dueDate.classList.add("task-due-date");
   const dueDateText = document.createTextNode(`${task.getDueDate()}`);
   dueDate.appendChild(dueDateText);
   elements.push(dueDate);
 
-  const detailsButton = document.createElememt("span");
+  const detailsButton = document.createElement("span");
   detailsButton.classList.add("task-details-button");
-  const detailsButtonText = document.createTextNode("details");
+  const detailsButtonText = document.createTextNode("Details");
   detailsButton.appendChild(detailsButtonText);
   elements.push(detailsButton);
 
-  const editButton = document.createElememt("span");
+  const editButton = document.createElement("span");
   editButton.classList.add("task-edit-button");
   elements.push(editButton);
 
-  const deleteButton = document.createElememt("span");
+  const deleteButton = document.createElement("span");
   deleteButton.classList.add("task-delete-button");
   elements.push(deleteButton);
 
@@ -237,6 +237,7 @@ function finishAgendaEdit (agenda, saving=false) {
   }
 }
 
+// TODO: Split loadPage out
 function loadPage () {
   // Load agendas
 
@@ -293,7 +294,7 @@ function loadPage () {
   // however viewAgenda will need changed as it doesn't accept current agenda
   viewAgenda(logic.getAgendas()[0], true);
 
-  // Event Listeners for task and agenda creation buttons
+  // Event Listeners
 
   const addAgendaButton = document.querySelector("#add-agenda");
 
@@ -307,10 +308,42 @@ function loadPage () {
     viewAgenda(newAgenda);
   })
 
+  // Add tasks
+
+  const dialog = document.querySelector("#createTaskDialog");
+
+  // TODO: set restrictions on the date input i.e. not before the current date etc.
+  // probably using that npm libary as shown on the project page
+  const dateInput = dialog.querySelector("#createTaskDueDate");
+
+
   const addTaskButton = document.querySelector("#add-task");
 
   addTaskButton.addEventListener("click", () => {
-    // TODO: show modal to add task details
+    dialog.showModal();
+  })
+
+  dialog.addEventListener("click", (e) => {
+    if (e.target === document.querySelector("#submitTaskForm")) {
+      const title = document.querySelector("#createTaskName").value;
+      let description = document.querySelector("#createTaskDescription").value;
+      description = description === "" ? null : description;
+      let dueDate = document.querySelector("#createTaskDueDate").value;
+      dueDate = dueDate === "" ? null : dueDate;
+      const priority = document.querySelector("#createTaskPriority").value;
+
+       let task = logic.createNewTask(title, logic.getCurrentAgenda().getId(),
+        {priority, description, dueDate});
+
+      createTaskElement(task);
+
+      dialog.close();
+    } else if (e.target === document.querySelector("#cancelTaskForm")) {
+      dialog.close();
+    } else if (e.target === document.querySelector("#clearTaskForm")) {
+      const form = document.querySelector("#createTaskForm");
+      form.reset();
+    }
   })
 }
 

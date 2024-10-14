@@ -93,6 +93,33 @@
         <div id="add-task-container"><button id="add-task">New Task</button></div>
       </div>
     </div>
+    <dialog id="createTaskDialog">
+      <form id="createTaskForm">
+        <div>
+          <label for="createTaskName">Title</label>
+          <input type="text" name="createTaskName" id="createTaskName" required>
+        </div>
+        <div>
+          <label for="createTaskDescription">Description</label>
+          <textarea name="createTaskDescription" id="createTaskDescription"></textarea>
+        </div>
+        <div>
+          <label for="createTaskDueDate">Due Date</label>
+          <input type="date" name="createTaskDueDate" id="createTaskDueDate">
+        </div>
+        <div>
+          <label for="createTaskPriority">Priority</label>
+          <select name="createTaskPriority" id="createTaskPriority">
+            <option value="Low" selected>Low</option>
+            <option value="Important">Important</option>
+            <option value="Urgent">Urgent</option>
+          </select>
+        </div>
+        <button type="button" id="submitTaskForm">Add Task</button>
+        <button type="button" id="clearTaskForm">Clear</button>
+        <button type="button" id="cancelTaskForm">Cancel</button>
+      </form>
+    </dialog>
   </div>
 </body>
 </html>

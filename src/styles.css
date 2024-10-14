@@ -365,6 +365,10 @@ body {
   place-content: center;
 }
 
+.task-check:hover {
+  cursor: pointer;
+}
+
 .task-check::before {
   content: "";
   width: 0.65em;
@@ -400,14 +404,34 @@ input[type="checkbox"]:focus {
 
 /* ========== */
 
+.task-details-button:hover {
+  cursor: pointer;
+  background-color: var(--peach);
+  color: var(--purple);
+  padding: 0.2em;
+  border-radius: 0.2em;
+}
+
+/* ========== */
+
 .task-edit-button {
   background-image: url(../assets/pencil-outline-white.svg);
+}
+
+.task-edit-button:hover {
+  cursor: pointer;
+  background-image: url(../assets/pencil-outline-blue.svg);
 }
 
 /* ========== */
 
 .task-delete-button {
   background-image: url(../assets/delete-outline-white.svg);
+}
+
+.task-delete-button:hover {
+  cursor: pointer;
+  background-image: url(../assets/delete-outline-red.svg);
 }
 
 /* ========== */
