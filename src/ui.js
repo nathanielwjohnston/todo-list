@@ -119,31 +119,46 @@ function viewAgenda (agenda, firstLoad=false) {
   newCurrentAgendaElement.classList.add("current-agenda");
 }
 
-function startAgendaEdit () {
-  const sidebarElement = document.querySelector(".current-agenda");
-
-  // Change sidebar icons
-
-  const firstIcon = sidebarElement.querySelector(".agenda-edit-button");
-  const secondIcon = sidebarElement.querySelector(".agenda-delete-button");
-
-  firstIcon.classList.remove("agenda-edit-button");
-  firstIcon.classList.add("agenda-edit-save-button");
-
-  secondIcon.classList.remove("agenda-delete-button");
-  secondIcon.classList.add("agenda-edit-cancel-button");
-
-  // Make agenda properties editable
-
+const agendaEditor = (function () {
   const agendaHeader = document.querySelector("#agenda-header");
   const heading = agendaHeader.querySelector("h1");
   const description = agendaHeader.querySelector("#agenda-description");
 
-  heading.setAttribute("contenteditable", true);
-  heading.classList.add("agenda-child-editing");
-  heading.focus();
-  description.setAttribute("contenteditable", true);
-  description.classList.add("agenda-child-editing");
+  function toggleAgendaEdit (heading, description) {
+    const sidebarElement = document.querySelector(".current-agenda");
+  
+    // Change sidebar icons
+  
+    const firstIcon = sidebarElement.querySelector(".agenda-edit-button") ||
+      sidebarElement.querySelector(".agenda-edit-save-button");
+    const secondIcon = sidebarElement.querySelector(".agenda-delete-button") ||
+      sidebarElement.querySelector(".agenda-edit-cancel-button");
+  
+    firstIcon.classList.toggle("agenda-edit-button");
+    firstIcon.classList.toggle("agenda-edit-save-button");
+  
+    secondIcon.classList.toggle("agenda-delete-button");
+    secondIcon.classList.toggle("agenda-edit-cancel-button");
+  
+    // Make agenda properties editable
+  
+    function checkAndSetContentEditable (element) {
+      if (element.getAttribute("contenteditable") === "true") {
+        element.setAttribute("contenteditable", false);
+      } else {
+        element.setAttribute("contenteditable", true);
+      }
+    }
+  
+    checkAndSetContentEditable(heading);
+    heading.classList.toggle("agenda-child-editing");
+    if (heading.classList.contains("agenda-child-editing")) {
+      heading.focus();
+    }
+  
+    checkAndSetContentEditable(description);
+    description.classList.toggle("agenda-child-editing");
+  }
 
   function agendaPropertyTyping(e, element, maxChars) {
     const key = e.key;
@@ -167,46 +182,41 @@ function startAgendaEdit () {
     }
   }
 
-  heading.addEventListener("keydown", e => agendaPropertyTyping(e, heading, 14))
-  description.addEventListener("keydown", e => agendaPropertyTyping(e, description, 50))
-}
-
-function finishAgendaEdit (agenda, saving=false) {
-  const sidebarElement = document.querySelector(".current-agenda");
-
-  // change sidebar icons
-
-
-  const firstIcon = sidebarElement.querySelector(".agenda-edit-save-button");
-  const secondIcon = sidebarElement.querySelector(".agenda-edit-cancel-button");
-
-  firstIcon.classList.remove("agenda-edit-save-button");
-  firstIcon.classList.add("agenda-edit-button");
-
-  secondIcon.classList.remove("agenda-edit-cancel-button");
-  secondIcon.classList.add("agenda-delete-button");
-
-  // Stop agenda property editing
-
-  const agendaHeader = document.querySelector("#agenda-header");
-  const heading = agendaHeader.querySelector("h1");
-  const description = agendaHeader.querySelector("#agenda-description");
-
-  heading.setAttribute("contenteditable", false);
-  heading.classList.remove("agenda-child-editing");
-  description.setAttribute("contenteditable", false);
-  description.classList.remove("agenda-child-editing");
-
-  if (saving) {
-    logic.editAgenda(agenda.getId(), heading.textContent, description.textContent)
-    const sidebarAgenda = document.querySelector(".current-agenda");
-    const agendaHeading = sidebarAgenda.querySelector("h3");
-    agendaHeading.textContent = heading.textContent;
-  } else {
-    heading.textContent = agenda.getName();
-    description.textContent = agenda.getDescription();
+  const headingListener = function (e) {
+    agendaPropertyTyping(e, heading, 14);
   }
-}
+
+  const descriptionListener = function (e) {
+    agendaPropertyTyping(e, description, 50);
+  }
+
+  function editAgenda () {
+    toggleAgendaEdit(heading, description);
+  
+    heading.addEventListener("keydown", headingListener);
+    description.addEventListener("keydown", descriptionListener);
+  }
+  
+  function finishAgendaEdit (agenda, saving=false) {
+    toggleAgendaEdit(heading, description);
+  
+    heading.removeEventListener("keydown", headingListener);
+    description.removeEventListener("keydown", descriptionListener);
+  
+    if (saving) {
+      logic.editAgenda(agenda.getId(), heading.textContent, description.textContent)
+      const sidebarAgenda = document.querySelector(".current-agenda");
+      const agendaHeading = sidebarAgenda.querySelector("h3");
+      agendaHeading.textContent = heading.textContent;
+    } else {
+      heading.textContent = agenda.getName();
+      description.textContent = agenda.getDescription();
+    }
+  }
+
+  return {editAgenda, finishAgendaEdit};
+})();
+
 
 function loadPage () {
   loadAgendas();
@@ -238,7 +248,7 @@ function loadPage () {
         },
         "agenda-edit-button":agenda => {
           viewAgenda(agenda);
-          startAgendaEdit();
+          agendaEditor.editAgenda();
         },
         "agenda-delete-button":agenda => {
           viewAgenda(agenda);
@@ -246,10 +256,10 @@ function loadPage () {
           // delete if accepted
         },
         "agenda-edit-save-button":agenda => {
-          finishAgendaEdit(agenda, true);
+          agendaEditor.finishAgendaEdit(agenda, true);
         },
         "agenda-edit-cancel-button":agenda => {
-          finishAgendaEdit(agenda);
+          agendaEditor.finishAgendaEdit(agenda);
         }
       };
   
