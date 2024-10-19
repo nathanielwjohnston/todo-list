@@ -32,7 +32,12 @@ function removeAgenda (agendaId) {
 }
 
 function getCurrentAgenda () {
-  return currentAgenda;
+  // check current agenda still exists
+  if (agendas.includes(currentAgenda)) {
+    return currentAgenda;
+  } else {
+    return null;
+  }
 }
 
 function updateCurrentAgenda (newCurrentAgenda) {
@@ -51,6 +56,17 @@ function editAgenda (agendaId, name, description) {
   // submitting a form and therefore all values will be submitted even if not new
   agenda.updateName(name);
   agenda.updateDescription(description);
+}
+
+function getPreviousAgenda (agenda) {  
+  const agendaIndex = agendas.indexOf(agenda);
+  const previousIndex = agendaIndex - 1;
+  if (previousIndex < 0) {
+    // No more agendas
+    return null;
+  } else {
+    return agendas[previousIndex];
+  }
 }
 
 function createNewTask (title, agendaId, {description=null, dueDate=null,
@@ -90,6 +106,6 @@ function removeTaskFromAgenda (agendaId, taskId) {
 }
 
 export { getAgendas, createNewAgenda, removeAgenda, getCurrentAgenda,
-  updateCurrentAgenda, getAgendaFromId, editAgenda, createNewTask,
-  getTaskFromId, editTask, removeTaskFromAgenda
+  updateCurrentAgenda, getAgendaFromId, editAgenda, getPreviousAgenda, 
+  createNewTask, getTaskFromId, editTask, removeTaskFromAgenda
  }

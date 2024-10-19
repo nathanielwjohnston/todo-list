@@ -27,6 +27,11 @@ function createAgendaElement (agenda) {
   agendaList.appendChild(listItem);
 }
 
+function deleteAgendaElement (agendaId) {
+  const sidebarElement = document.querySelector(`[data-agenda-id="${agendaId}"]`);
+  sidebarElement.remove();
+}
+
 function createTaskElement (task) {
   const taskList = document.querySelector("#task-list");
 
@@ -108,9 +113,11 @@ function viewAgenda (agenda, firstLoad=false) {
 
   // Deselect agenda in sidebar
   const currentAgenda = logic.getCurrentAgenda();
-  const currentAgendaElement = document
-    .querySelector(`[data-agenda-id="${currentAgenda.getId()}"]`);
-  currentAgendaElement.classList.remove("current-agenda");
+  if (currentAgenda) {
+    const currentAgendaElement = document
+      .querySelector(`[data-agenda-id="${currentAgenda.getId()}"]`);
+    currentAgendaElement.classList.remove("current-agenda");
+  }
 
   logic.updateCurrentAgenda(agenda);
   // Select agenda in sidebar (using CSS)
@@ -217,6 +224,27 @@ const agendaEditor = (function () {
   return {editAgenda, finishAgendaEdit};
 })();
 
+function loadBlankAgenda () {
+  const agendaHeading = document.querySelector("#agenda-header");
+  const heading = agendaHeading.querySelector("h1");
+  heading.replaceChildren();
+
+  const agendaDescription = document.querySelector("#agenda-description");
+  agendaDescription.replaceChildren();
+
+  const prioritiesKey = document.querySelector("#priorities-key");
+  prioritiesKey.style.display = "none";
+
+  const newTaskButton = document.querySelector("#add-task");
+  newTaskButton.disabled = true;
+
+  const newAgendaButton = document.querySelector("#add-agenda");
+  newAgendaButton.addEventListener("click", function showElements () {
+    prioritiesKey.style.display = "block";
+    newTaskButton.disabled = false;
+    this.removeEventListener("click", showElements);
+  });
+}
 
 function loadPage () {
   loadAgendas();
@@ -253,7 +281,32 @@ function loadPage () {
         "agenda-delete-button":agenda => {
           viewAgenda(agenda);
           // show confirmation modal
-          // delete if accepted
+          const dialog = document.querySelector("#deleteAgendaConfirmationDialog");
+          if (dialog.open) {
+            return;
+          }
+          dialog.show();
+          dialog.addEventListener("click", function agendaDeletion (e) {
+            if (e.target === document.querySelector("#confirmAgendaDelete")) {
+              const previousAgenda = logic.getPreviousAgenda(agenda);
+              const agendaId = agenda.getId();
+              // delete if accepted
+              logic.removeAgenda(agendaId);
+
+              if (previousAgenda) {
+                viewAgenda(previousAgenda);
+              } else {
+                // No Agenda Page
+                loadBlankAgenda();
+              }
+              dialog.close();
+              deleteAgendaElement(agendaId);
+              this.removeEventListener("click", agendaDeletion);
+            } else if (e.target === document.querySelector("#preventAgendaDelete")) {
+              dialog.close();
+              this.removeEventListener("click", agendaDeletion);
+            }
+          })
         },
         "agenda-edit-save-button":agenda => {
           agendaEditor.finishAgendaEdit(agenda, true);

@@ -482,9 +482,18 @@ input[type="checkbox"]:focus {
   color: var(--peach);
 }
 
+#add-task:disabled {
+  opacity: 0.5;
+}
+
 #add-task:hover {
   cursor: pointer;
   background-color: var(--purple);
+}
+
+#add-task:disabled:hover {
+  background-color: var(--dark-purple);
+  cursor: default;
 }
 
 /* ========== */
