@@ -128,6 +128,14 @@ body {
   outline: 1px solid var(--brown);
 }
 
+.agenda-item.disabled-agenda-item {
+  opacity: 0.5;
+}
+
+.agenda-item.disabled-agenda-item:hover {
+  cursor: default;
+}
+
 .current-agenda {
   background-color: var(--dark-purple);
   color: var(--peach);
@@ -482,18 +490,18 @@ input[type="checkbox"]:focus {
   color: var(--peach);
 }
 
-#add-task:disabled {
-  opacity: 0.5;
-}
-
 #add-task:hover {
   cursor: pointer;
   background-color: var(--purple);
 }
 
-#add-task:disabled:hover {
+/* ========== */
+
+#add-task:disabled:hover, #add-agenda:disabled:hover {
   background-color: var(--dark-purple);
   cursor: default;
 }
 
-/* ========== */
+#add-task:disabled, #add-agenda:disabled {
+  opacity: 0.5;
+}

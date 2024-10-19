@@ -197,8 +197,20 @@ const agendaEditor = (function () {
     agendaPropertyTyping(e, description, 50);
   }
 
-  function editAgenda () {
+  function editAgenda (agenda) {
     toggleAgendaEdit(heading, description);
+
+    // Prevent other actions
+    const newAgendaButton = document.querySelector("#add-agenda");
+    newAgendaButton.disabled = true;
+
+    const newTaskButton = document.querySelector("#add-task");
+    newTaskButton.disabled = true;
+
+    const sidebarAgendas = document.querySelectorAll(".agenda-item:not(.current-agenda)");
+    sidebarAgendas.forEach(sidebarAgenda => {
+      sidebarAgenda.classList.add("disabled-agenda-item");
+    })
   
     heading.addEventListener("keydown", headingListener);
     description.addEventListener("keydown", descriptionListener);
@@ -206,6 +218,18 @@ const agendaEditor = (function () {
   
   function finishAgendaEdit (agenda, saving=false) {
     toggleAgendaEdit(heading, description);
+
+    // Allow other actions
+    const newAgendaButton = document.querySelector("#add-agenda");
+    newAgendaButton.disabled = false;
+
+    const newTaskButton = document.querySelector("#add-task");
+    newTaskButton.disabled = false;
+
+    const sidebarAgendas = document.querySelectorAll(".agenda-item:not(.current-agenda)");
+    sidebarAgendas.forEach(sidebarAgenda => {
+      sidebarAgenda.classList.remove("disabled-agenda-item");
+    })
   
     heading.removeEventListener("keydown", headingListener);
     description.removeEventListener("keydown", descriptionListener);
@@ -276,7 +300,7 @@ function loadPage () {
         },
         "agenda-edit-button":agenda => {
           viewAgenda(agenda);
-          agendaEditor.editAgenda();
+          agendaEditor.editAgenda(agenda);
         },
         "agenda-delete-button":agenda => {
           viewAgenda(agenda);
@@ -317,9 +341,16 @@ function loadPage () {
       };
   
       const targetClasses = e.target.classList;
+
+      // Prevents disabled agenda elements from being clicked when editing another agenda
+      if (targetClasses.contains("disabled-agenda-item") ||
+          e.target.parentElement.classList.contains("disabled-agenda-item")) {
+            return;
+      }
+
       targetClasses.forEach(targetClass => {
         if (targetClass in classes) {
-          if (targetClass === "agenda-item") {
+          if (targetClass === "agenda-item" ) {
             classes[targetClass](logic.getAgendaFromId(e.target.dataset.agendaId));
           } else {
             classes[targetClass](logic.getAgendaFromId(e.target.parentElement.dataset.agendaId));
