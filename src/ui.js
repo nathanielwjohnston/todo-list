@@ -72,15 +72,58 @@ function createTaskElement (task) {
     checkbox.checked = true;
   }
 
-  addNewElement(["task-title"], "span", containerDiv, `${task.getTitle()}`);
-  addNewElement(["task-due-date"], "span", containerDiv, `${task.getDueDate()}`);
-  addNewElement(["task-details-button"], "span", containerDiv, "Details");
-  addNewElement(["task-edit-button"], "span", containerDiv);
-  addNewElement(["task-delete-button"], "span", containerDiv);
+  const title = task.getTitle();
+  const dueDate = task.getDueDate();
+
+  addNewElement(["task-title"], "span", containerDiv, `${title}`);
+  addNewElement(["task-due-date"], "span", containerDiv, `${dueDate}`);
+  const detailsButton = addNewElement(["task-details-button"], "span", containerDiv, "Details");
+  const editButton = addNewElement(["task-edit-button"], "span", containerDiv);
+  const deleteButton = addNewElement(["task-delete-button"], "span", containerDiv);
+
+  detailsButton.addEventListener("click", () => {
+
+  })
+
+  editButton.addEventListener("click", () => {
+    document.querySelector("#formTypeInput").value = "edit-task";
+    document.querySelector("#formTaskId").value = taskId;
+    document.querySelector("#taskNameInput").value = title;
+    document.querySelector("#taskDescriptionInput").value = task.getDescription();
+    document.querySelector("#taskDueDateInput").value = dueDate;
+    document.querySelector("#taskPriorityInput").value = priority
+
+    const dialog = document.querySelector("#taskDialog");
+    dialog.showModal();
+  })
+
+  deleteButton.addEventListener("click", () => {
+  
+  })
 
   listItem.appendChild(containerDiv);
 
   taskList.appendChild(listItem);
+}
+
+function updateTaskElement (agendaId, taskId) {
+  const task =  logic.getTaskFromId(agendaId, taskId);
+
+  console.log(task);
+
+  const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
+  
+  const title = taskElement.querySelector(".task-title");
+  const dueDate = taskElement.querySelector(".task-due-date");
+  const priority = taskElement.querySelector(".task-priority");
+
+  title.textContent = task.getTitle();
+  dueDate.textContent = task.getDueDate();
+
+  const taskPriority = task.getPriority();
+  priority.textContent = taskPriority.slice(0,1).toUpperCase();
+  priority.classList.remove("low", "important", "urgent");
+  priority.classList.add(`${taskPriority.toLowerCase()}`);
 }
 
 // Switches to an agenda
@@ -372,11 +415,11 @@ function loadPage () {
       viewAgenda(newAgenda);
     })
   
-    const dialog = document.querySelector("#createTaskDialog");
+    const dialog = document.querySelector("#taskDialog");
   
     // TODO: set restrictions on the date input i.e. not before the current date etc.
     // probably using that npm libary as shown on the project page
-    const dateInput = dialog.querySelector("#createTaskDueDate");
+    const dateInput = dialog.querySelector("#taskDueDateInput");
   
   
     const addTaskButton = document.querySelector("#add-task");
@@ -386,24 +429,36 @@ function loadPage () {
     })
   
     dialog.addEventListener("click", (e) => {
+      const form = document.querySelector("#taskForm");
       if (e.target === document.querySelector("#submitTaskForm")) {
-        const title = document.querySelector("#createTaskName").value;
-        let description = document.querySelector("#createTaskDescription").value;
+        const title = document.querySelector("#taskNameInput").value;
+        let description = document.querySelector("#taskDescriptionInput").value;
         description = description === "" ? null : description;
-        let dueDate = document.querySelector("#createTaskDueDate").value;
+        let dueDate = document.querySelector("#taskDueDateInput").value;
         dueDate = dueDate === "" ? null : dueDate;
-        const priority = document.querySelector("#createTaskPriority").value;
-  
-        let task = logic.createNewTask(title, logic.getCurrentAgenda().getId(),
+        const priority = document.querySelector("#taskPriorityInput").value;
+        
+
+        let formType = document.querySelector("#formTypeInput").value;
+
+        if (formType === "new-task") {
+          let task = logic.createNewTask(title, logic.getCurrentAgenda().getId(),
           {priority, description, dueDate});
   
-        createTaskElement(task);
-  
-        dialog.close();
+          createTaskElement(task);
+        } else if (formType === "edit-task") {
+          const agendaId = logic.getCurrentAgenda().getId(); 
+          const taskId = parseInt(document.querySelector("#formTaskId").value);
+          logic.editTask(agendaId, taskId, title, description, dueDate, priority);
+          updateTaskElement(agendaId, taskId);
+        }
+        
+        dialog.close(); 
+        form.reset();
       } else if (e.target === document.querySelector("#cancelTaskForm")) {
         dialog.close();
+        form.reset();
       } else if (e.target === document.querySelector("#clearTaskForm")) {
-        const form = document.querySelector("#createTaskForm");
         form.reset();
       }
     })
