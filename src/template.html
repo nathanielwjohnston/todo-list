@@ -117,7 +117,7 @@
         </div>
         <input type="hidden" name="formTypeInput" id="formTypeInput" value="new-task">
         <input type="hidden" name="formTaskId" id="formTaskId">
-        <button type="button" id="submitTaskForm">Add Task</button>
+        <button type="button" id="submitTaskForm">Submit Task</button>
         <button type="button" id="clearTaskForm">Clear</button>
         <button type="button" id="cancelTaskForm">Cancel</button>
       </form>
@@ -126,6 +126,15 @@
       <p id="deleteConfirmationQuestion"></p>
       <button id="confirmDelete">Yes</button>
       <button id="preventDelete">No</button>
+    </dialog>
+    <dialog id="task-details-dialog">
+      <div>
+        <h2 id="task-details-title"></h2>
+        <p id="task-details-description"></p>
+        <span id="task-details-priority"></span>
+        <span id="task-details-due-date"></span>
+        <button id="close-details-dialog">Close</button>
+      </div>
     </dialog>
   </div>
 </body>

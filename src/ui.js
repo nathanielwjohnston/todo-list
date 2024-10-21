@@ -82,7 +82,18 @@ function createTaskElement (task) {
   const deleteButton = addNewElement(["task-delete-button"], "span", containerDiv);
 
   detailsButton.addEventListener("click", () => {
+    const dialog = document.querySelector("#task-details-dialog");
+    dialog.showModal()
+    
+    dialog.querySelector("#task-details-title").textContent = task.getTitle();
+    dialog.querySelector("#task-details-description").textContent = task.getDescription();
+    dialog.querySelector("#task-details-priority").textContent = task.getPriority();
+    dialog.querySelector("#task-details-due-date").textContent = task.getDueDate();
 
+    const closeButton = dialog.querySelector("#close-details-dialog");
+    closeButton.addEventListener("click", () => {
+      dialog.close();
+    })
   })
 
   editButton.addEventListener("click", () => {
@@ -99,13 +110,10 @@ function createTaskElement (task) {
 
   deleteButton.addEventListener("click", () => {
     const dialog = document.querySelector("#deleteConfirmationDialog");
-    if (dialog.open) {
-      return;
-    }
 
     const question = dialog.querySelector("#deleteConfirmationQuestion");
     question.textContent = "Are you sure you want to delete this task?";
-    dialog.show();
+    dialog.showModal();
     dialog.addEventListener("click", function taskDeletion (e) {
       if (e.target === document.querySelector("#confirmDelete")) {
         logic.removeTaskFromAgenda(logic.getCurrentAgenda().getId(), taskId);
@@ -370,12 +378,9 @@ function loadPage () {
           viewAgenda(agenda);
           // show confirmation modal
           const dialog = document.querySelector("#deleteConfirmationDialog");
-          if (dialog.open) {
-            return;
-          }
           const question = dialog.querySelector("#deleteConfirmationQuestion");
           question.textContent = "Are you sure you want to delete this agenda?";
-          dialog.show();
+          dialog.showModal();
           dialog.addEventListener("click", function agendaDeletion (e) {
             if (e.target === document.querySelector("#confirmDelete")) {
               const previousAgenda = logic.getPreviousAgenda(agenda);
