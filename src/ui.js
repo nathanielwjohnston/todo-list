@@ -72,6 +72,15 @@ function createTaskElement (task) {
     checkbox.checked = true;
   }
 
+  checkbox.addEventListener("click", e => {
+    if (task.getCompletionStatus()) {
+      e.preventDefault();
+    } else {
+      task.completeTask();
+      listItem.classList.add("completed");
+    }
+  })
+
   const title = task.getTitle();
   const dueDate = task.getDueDate();
 
