@@ -88,10 +88,10 @@ function createTaskElement (task) {
   editButton.addEventListener("click", () => {
     document.querySelector("#formTypeInput").value = "edit-task";
     document.querySelector("#formTaskId").value = taskId;
-    document.querySelector("#taskNameInput").value = title;
+    document.querySelector("#taskNameInput").value = task.getTitle();
     document.querySelector("#taskDescriptionInput").value = task.getDescription();
-    document.querySelector("#taskDueDateInput").value = dueDate;
-    document.querySelector("#taskPriorityInput").value = priority
+    document.querySelector("#taskDueDateInput").value = task.getDueDate();
+    document.querySelector("#taskPriorityInput").value = task.getPriority();
 
     const dialog = document.querySelector("#taskDialog");
     dialog.showModal();
