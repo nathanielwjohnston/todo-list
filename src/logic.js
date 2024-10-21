@@ -1,5 +1,6 @@
 import { createTask, priorities } from "./tasks";
 import { createAgenda } from "./agendas";
+import { deleteTaskElement } from "./ui";
 
 /* The display controller will be using these functions for information.
    Therefore, the input will be mostly id-based */
@@ -32,8 +33,16 @@ function createNewAgenda (name, description=null) {
 function removeAgenda (agendaId) {
   // get specified agenda
   const agenda = getAgendaFromId(agendaId);
+
+  const tasks = agenda.getTasks();
+  for (let task of tasks) {
+    agenda.removeTask(task);
+    deleteTaskElement(task.getId());
+  }
+
   // remove from agendas array
   agendas.splice(agendas.indexOf(agenda), 1);
+
 }
 
 function getCurrentAgenda () {

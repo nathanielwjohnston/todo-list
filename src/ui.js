@@ -488,4 +488,4 @@ function loadPage () {
   }
 }
 
-export { loadPage }
+export { loadPage, deleteTaskElement }
