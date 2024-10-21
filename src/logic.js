@@ -4,7 +4,10 @@ import { createAgenda } from "./agendas";
 /* The display controller will be using these functions for information.
    Therefore, the input will be mostly id-based */
 
-// Add parse int to Ids in functions and remove from ui module
+// TODO: Add parse int to Ids in functions and remove from ui module
+
+// TODO: remove the need for agendaID with task functions, this should be done in logic
+// as it isn't always easy to do this in ui.
 
 const defaultAgenda = createAgenda();
 

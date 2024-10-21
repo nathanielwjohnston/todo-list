@@ -98,7 +98,25 @@ function createTaskElement (task) {
   })
 
   deleteButton.addEventListener("click", () => {
-  
+    const dialog = document.querySelector("#deleteConfirmationDialog");
+    if (dialog.open) {
+      return;
+    }
+
+    const question = dialog.querySelector("#deleteConfirmationQuestion");
+    question.textContent = "Are you sure you want to delete this task?";
+    dialog.show();
+    dialog.addEventListener("click", function taskDeletion (e) {
+      if (e.target === document.querySelector("#confirmDelete")) {
+        logic.removeTaskFromAgenda(logic.getCurrentAgenda().getId(), taskId);
+        dialog.close();
+        deleteTaskElement(taskId);
+        this.removeEventListener("click", taskDeletion);
+      } else if (e.target === document.querySelector("#preventDelete")) {
+        dialog.close();
+        this.removeEventListener("click", taskDeletion);
+      }
+    })
   })
 
   listItem.appendChild(containerDiv);
@@ -108,8 +126,6 @@ function createTaskElement (task) {
 
 function updateTaskElement (agendaId, taskId) {
   const task =  logic.getTaskFromId(agendaId, taskId);
-
-  console.log(task);
 
   const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
   
@@ -124,6 +140,11 @@ function updateTaskElement (agendaId, taskId) {
   priority.textContent = taskPriority.slice(0,1).toUpperCase();
   priority.classList.remove("low", "important", "urgent");
   priority.classList.add(`${taskPriority.toLowerCase()}`);
+}
+
+function deleteTaskElement(taskId) {
+  const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
+  taskElement.remove();
 }
 
 // Switches to an agenda
@@ -348,13 +369,15 @@ function loadPage () {
         "agenda-delete-button":agenda => {
           viewAgenda(agenda);
           // show confirmation modal
-          const dialog = document.querySelector("#deleteAgendaConfirmationDialog");
+          const dialog = document.querySelector("#deleteConfirmationDialog");
           if (dialog.open) {
             return;
           }
+          const question = dialog.querySelector("#deleteConfirmationQuestion");
+          question.textContent = "Are you sure you want to delete this agenda?";
           dialog.show();
           dialog.addEventListener("click", function agendaDeletion (e) {
-            if (e.target === document.querySelector("#confirmAgendaDelete")) {
+            if (e.target === document.querySelector("#confirmDelete")) {
               const previousAgenda = logic.getPreviousAgenda(agenda);
               const agendaId = agenda.getId();
               // delete if accepted
@@ -369,7 +392,7 @@ function loadPage () {
               dialog.close();
               deleteAgendaElement(agendaId);
               this.removeEventListener("click", agendaDeletion);
-            } else if (e.target === document.querySelector("#preventAgendaDelete")) {
+            } else if (e.target === document.querySelector("#preventDelete")) {
               dialog.close();
               this.removeEventListener("click", agendaDeletion);
             }
