@@ -81,11 +81,8 @@ function createTaskElement (task) {
     }
   })
 
-  const title = task.getTitle();
-  const dueDate = task.getDueDate();
-
-  addNewElement(["task-title"], "span", containerDiv, `${title}`);
-  addNewElement(["task-due-date"], "span", containerDiv, `${dueDate}`);
+  addNewElement(["task-title"], "span", containerDiv, `${task.getTitle()}`);
+  addNewElement(["task-due-date"], "span", containerDiv, `${task.getDueDate()}`);
   const detailsButton = addNewElement(["task-details-button"], "span", containerDiv, "Details");
   const editButton = addNewElement(["task-edit-button"], "span", containerDiv);
   const deleteButton = addNewElement(["task-delete-button"], "span", containerDiv);
@@ -93,11 +90,33 @@ function createTaskElement (task) {
   detailsButton.addEventListener("click", () => {
     const dialog = document.querySelector("#task-details-dialog");
     dialog.showModal()
-    
-    dialog.querySelector("#task-details-title").textContent = task.getTitle();
-    dialog.querySelector("#task-details-description").textContent = task.getDescription();
-    dialog.querySelector("#task-details-priority").textContent = task.getPriority();
-    dialog.querySelector("#task-details-due-date").textContent = task.getDueDate();
+
+    const titleElement = dialog.querySelector("#task-details-title");
+    const descriptionElement = dialog.querySelector("#task-details-description");
+    const priorityElement = dialog.querySelector("#task-details-priority");
+    const dateElement = dialog.querySelector("#task-details-due-date");
+
+    const taskPriority = task.getPriority();
+
+    priorityElement.classList.remove("low", "important", "urgent");
+    priorityElement.classList.add(`${taskPriority.toLowerCase()}`);
+
+    titleElement.textContent = task.getTitle();
+    descriptionElement.textContent = task.getDescription();
+    priorityElement.textContent = `Priority: ${taskPriority}`;
+    dateElement.textContent = task.getDueDate();
+    const elements = [descriptionElement, dateElement];
+
+    for (let element of elements) {
+      if (!element.classList.contains("not-set") && element.textContent === "") {
+        element.classList.add("not-set");
+      } else if (element.classList.contains("not-set") && element.textContent !== "") {
+        element.classList.remove("not-set");
+      }
+    }
+
+    // Set here so the loop can accurately gauge if there is a value set
+    dateElement.textContent = "Due Date: " + dateElement.textContent;
 
     const closeButton = dialog.querySelector("#close-details-dialog");
     closeButton.addEventListener("click", () => {

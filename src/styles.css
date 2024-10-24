@@ -505,3 +505,167 @@ input[type="checkbox"]:focus {
 #add-task:disabled, #add-agenda:disabled {
   opacity: 0.5;
 }
+
+/* ==========================================================================
+  Dialogs
+  ========================================================================== */
+
+dialog {
+  /*  https://medium.com/@debajyotim/making-an-element-center-simple-css-tricks-b51cca7597ce */
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1em;
+  border-radius: 0.2rem;
+  border: 3px solid var(--brown);
+  text-align: center;
+}
+
+dialog button {
+  background-color: var(--dark-purple);
+  color: var(--peach);
+  border-radius: 0.2rem;
+  border: none;
+}
+
+dialog button:hover {
+  cursor: pointer;
+  background-color: var(--purple);
+}
+
+.dialog-content-container {
+  display: grid;  
+  gap: 0.8em 0em;
+}
+
+/* Task and Agenda Deletion Confirmation */
+
+#deleteConfirmationDialog {
+  width: 30%;
+}
+
+#deleteConfirmationDialog .dialog-content-container {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+#deleteConfirmationDialog #deleteConfirmationQuestion {
+  grid-column: 1 / 3;
+}
+
+#deleteConfirmationDialog #confirmDelete, #deleteConfirmationDialog #preventDelete {
+  margin: 0 1em;
+}
+
+/* Task details */
+
+#task-details-dialog {
+  min-width: 15%;
+  max-width: 30%;
+}
+
+#task-details-dialog .dialog-content-container {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr repeat(3, auto) 1fr
+}
+
+#task-details-title {
+  grid-column: 1 / 4;
+}
+
+#task-details-description {
+  text-align: left;
+  border: 1px solid;
+  border-radius: 0.2rem;
+  padding: 0.2em;
+  max-height: 10em;
+  overflow-y: scroll;
+}
+
+#task-details-description.not-set:after,
+#task-details-due-date.not-set:after {
+  content: "Not set";
+  font-style: italic;
+}
+
+.description-container {
+  grid-column: 1 / 4;
+  text-align: left;
+}
+
+#task-details-priority {
+  grid-column: 1 / 2;
+  text-align: left;
+}
+
+#task-details-priority.low {
+  color: var(--priority-low-priority);
+}
+
+#task-details-priority.important {
+  color: var(--priority-important);
+}
+
+#task-details-priority.urgent {
+  color: var(--priority-urgent);
+}
+
+#task-details-due-date {
+  grid-column: 1 / 3;
+  text-align: left;
+}
+
+#close-details-dialog {
+  grid-column: 2 / 3;
+  grid-row: 5 / 6;
+}
+
+/* Task Edit */
+
+#taskForm {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8em 0.8em;
+}
+
+#taskForm div{
+  grid-column: 1 / 4;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  text-align: left;
+}
+
+label[for=taskNameInput] {
+  grid-row: 1 / 2;
+}
+
+label[for=taskNameInput]:after {
+  content: "Required";
+  float: right;
+  background-color: var(--dark-purple);
+  color: white;
+  border-radius: 0.2rem;
+  padding: 0 0.1em;
+}
+
+#taskNameInput:required:valid + label[for=taskNameInput]:after {
+  content: "";
+}
+
+#taskDescriptionInput {
+  padding: 0.4em;
+}
+
+#taskPriorityInput option {
+  background-color: var(--dark-purple);
+  color: white;
+}
+
+#taskPriorityInput option:checked {
+  background-color: var(--purple);
+}
+
+#taskForm button {
+  padding: 0.2em 0;
+}
