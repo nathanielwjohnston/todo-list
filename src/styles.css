@@ -653,8 +653,14 @@ label[for=task-name-input]:after {
   content: "";
 }
 
-#task-description-input {
-  padding: 0.4em;
+#task-name-input.max-characters:required:valid + label[for=task-name-input]:after {
+  content: "Max. characters";
+  background-color: transparent;
+  color: red;
+}
+
+#task-description-input, #task-form input {
+  padding: 0.1em 0.4em;
 }
 
 #task-priority-input option {

@@ -119,7 +119,24 @@ function removeTaskFromAgenda (agendaId, taskId) {
   agenda.removeTask(task);
 }
 
+const getMaxCharacters = (function () {
+  function agendaHeader () {
+    return 14;
+  }
+
+  function agendaDescription () {
+    return 50;
+  }
+
+  function taskTitle () {
+    return 35;
+  }
+
+  return { agendaHeader, agendaDescription, taskTitle }
+})();
+
 export { getAgendas, createNewAgenda, removeAgenda, getCurrentAgenda,
   updateCurrentAgenda, getAgendaFromId, editAgenda, getPreviousAgenda, 
-  createNewTask, getTaskFromId, editTask, removeTaskFromAgenda
+  createNewTask, getTaskFromId, editTask, removeTaskFromAgenda,
+  getMaxCharacters
  }

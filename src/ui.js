@@ -291,11 +291,11 @@ const agendaEditor = (function () {
   }
 
   const headingListener = function (e) {
-    agendaPropertyTyping(e, heading, 14);
+    agendaPropertyTyping(e, heading, logic.getMaxCharacters.agendaHeader());
   }
 
   const descriptionListener = function (e) {
-    agendaPropertyTyping(e, description, 50);
+    agendaPropertyTyping(e, description, logic.getMaxCharacters.agendaDescription());
   }
 
   function editAgenda (agenda) {
@@ -474,12 +474,26 @@ function loadPage () {
   
     const dialog = document.querySelector("#task-dialog");
   
+    // Set restrictions to title character length
+    const title = dialog.querySelector("#task-name-input");
+    title.setAttribute("maxlength", logic.getMaxCharacters.taskTitle());
+
+    title.addEventListener("keydown", e => {
+      const maxChars = logic.getMaxCharacters.taskTitle();
+      if (title.value.length === maxChars && !title.classList.contains("max-characters")) {
+        title.classList.add("max-characters");
+      }
+      else if (e.key === "Backspace" && title.classList.contains("max-characters")) {
+        title.classList.remove("max-characters");
+      }
+      console.log(title.textContent.length);
+    })
+
     // Set restrictions on the date input
     const dateInput = dialog.querySelector("#task-due-date-input");
     const currentDate = format(new Date(), "yyyy-MM-dd");
     dateInput.setAttribute("min", currentDate);
     
-  
     const addTaskButton = document.querySelector("#add-task");
   
     addTaskButton.addEventListener("click", () => {
