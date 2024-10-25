@@ -6,7 +6,7 @@ let currentTaskId = 0;
 export function createTask ({title, description=null, dueDate=null,
   priority=priorities.lowPriority}) {
 
-  // set id to next available and then increment for next task
+  // Set id to next available and then increment for next task
   const id = currentTaskId++;
 
   const getId = () => id;
@@ -17,7 +17,6 @@ export function createTask ({title, description=null, dueDate=null,
   const getDescription = () => description === null ? "" : description; 
   const updateDescription = (newDescription) => description = newDescription;
 
-  // Should this be an empty string?
   const getDueDate = () => dueDate === null ? "" : dueDate;
   const updateDueDate = (newDueDate) => dueDate = newDueDate;
 

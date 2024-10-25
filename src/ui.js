@@ -1,4 +1,5 @@
 import * as logic from "./logic";
+import { format } from "date-fns";
 
 function createAgendaElement (agenda) {
   const agendaList = document.querySelector("#agenda-list");
@@ -82,7 +83,7 @@ function createTaskElement (task) {
   })
 
   addNewElement(["task-title"], "span", containerDiv, `${task.getTitle()}`);
-  addNewElement(["task-due-date"], "span", containerDiv, `${task.getDueDate()}`);
+  addNewElement(["task-due-date"], "span", containerDiv, `${format(task.getDueDate(), "dd/MM/yyyy")}`);
   const detailsButton = addNewElement(["task-details-button"], "span", containerDiv, "Details");
   const editButton = addNewElement(["task-edit-button"], "span", containerDiv);
   const deleteButton = addNewElement(["task-delete-button"], "span", containerDiv);
@@ -104,7 +105,7 @@ function createTaskElement (task) {
     titleElement.textContent = task.getTitle();
     descriptionElement.textContent = task.getDescription();
     priorityElement.textContent = `Priority: ${taskPriority}`;
-    dateElement.textContent = task.getDueDate();
+    dateElement.textContent = format(task.getDueDate(), "dd/MM/yyyy");
     const elements = [descriptionElement, dateElement];
 
     for (let element of elements) {
@@ -473,10 +474,11 @@ function loadPage () {
   
     const dialog = document.querySelector("#task-dialog");
   
-    // TODO: set restrictions on the date input i.e. not before the current date etc.
-    // probably using that npm libary as shown on the project page
+    // Set restrictions on the date input
     const dateInput = dialog.querySelector("#task-due-date-input");
-  
+    const currentDate = format(new Date(), "yyyy-MM-dd");
+    dateInput.setAttribute("min", currentDate);
+    
   
     const addTaskButton = document.querySelector("#add-task");
   
