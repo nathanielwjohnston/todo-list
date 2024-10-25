@@ -541,20 +541,20 @@ dialog button:hover {
 
 /* Task and Agenda Deletion Confirmation */
 
-#deleteConfirmationDialog {
+#delete-confirmation-dialog {
   width: 30%;
 }
 
-#deleteConfirmationDialog .dialog-content-container {
+#delete-confirmation-dialog .dialog-content-container {
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
 }
 
-#deleteConfirmationDialog #deleteConfirmationQuestion {
+#delete-confirmation-dialog #delete-confirmation-question {
   grid-column: 1 / 3;
 }
 
-#deleteConfirmationDialog #confirmDelete, #deleteConfirmationDialog #preventDelete {
+#delete-confirmation-dialog #confirm-delete, #delete-confirmation-dialog #prevent-delete {
   margin: 0 1em;
 }
 
@@ -623,24 +623,24 @@ dialog button:hover {
 
 /* Task Edit */
 
-#taskForm {
+#task-form {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.8em 0.8em;
 }
 
-#taskForm div{
+#task-form div{
   grid-column: 1 / 4;
   display: grid;
   grid-template-rows: auto 1fr;
   text-align: left;
 }
 
-label[for=taskNameInput] {
+label[for=task-name-input] {
   grid-row: 1 / 2;
 }
 
-label[for=taskNameInput]:after {
+label[for=task-name-input]:after {
   content: "Required";
   float: right;
   background-color: var(--dark-purple);
@@ -649,23 +649,23 @@ label[for=taskNameInput]:after {
   padding: 0 0.1em;
 }
 
-#taskNameInput:required:valid + label[for=taskNameInput]:after {
+#task-name-input:required:valid + label[for=task-name-input]:after {
   content: "";
 }
 
-#taskDescriptionInput {
+#task-description-input {
   padding: 0.4em;
 }
 
-#taskPriorityInput option {
+#task-priority-input option {
   background-color: var(--dark-purple);
   color: white;
 }
 
-#taskPriorityInput option:checked {
+#task-priority-input option:checked {
   background-color: var(--purple);
 }
 
-#taskForm button {
+#task-form button {
   padding: 0.2em 0;
 }

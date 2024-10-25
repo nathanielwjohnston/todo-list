@@ -125,30 +125,30 @@ function createTaskElement (task) {
   })
 
   editButton.addEventListener("click", () => {
-    document.querySelector("#formTypeInput").value = "edit-task";
-    document.querySelector("#formTaskId").value = taskId;
-    document.querySelector("#taskNameInput").value = task.getTitle();
-    document.querySelector("#taskDescriptionInput").value = task.getDescription();
-    document.querySelector("#taskDueDateInput").value = task.getDueDate();
-    document.querySelector("#taskPriorityInput").value = task.getPriority();
+    document.querySelector("#form-type-input").value = "edit-task";
+    document.querySelector("#form-task-id").value = taskId;
+    document.querySelector("#task-name-input").value = task.getTitle();
+    document.querySelector("#task-description-input").value = task.getDescription();
+    document.querySelector("#task-due-date-input").value = task.getDueDate();
+    document.querySelector("#task-priority-input").value = task.getPriority();
 
-    const dialog = document.querySelector("#taskDialog");
+    const dialog = document.querySelector("#task-dialog");
     dialog.showModal();
   })
 
   deleteButton.addEventListener("click", () => {
-    const dialog = document.querySelector("#deleteConfirmationDialog");
+    const dialog = document.querySelector("#delete-confirmation-dialog");
 
-    const question = dialog.querySelector("#deleteConfirmationQuestion");
+    const question = dialog.querySelector("#delete-confirmation-question");
     question.textContent = "Are you sure you want to delete this task?";
     dialog.showModal();
     dialog.addEventListener("click", function taskDeletion (e) {
-      if (e.target === document.querySelector("#confirmDelete")) {
+      if (e.target === document.querySelector("#confirm-delete")) {
         logic.removeTaskFromAgenda(logic.getCurrentAgenda().getId(), taskId);
         dialog.close();
         deleteTaskElement(taskId);
         this.removeEventListener("click", taskDeletion);
-      } else if (e.target === document.querySelector("#preventDelete")) {
+      } else if (e.target === document.querySelector("#prevent-delete")) {
         dialog.close();
         this.removeEventListener("click", taskDeletion);
       }
@@ -405,12 +405,12 @@ function loadPage () {
         "agenda-delete-button":agenda => {
           viewAgenda(agenda);
           // show confirmation modal
-          const dialog = document.querySelector("#deleteConfirmationDialog");
-          const question = dialog.querySelector("#deleteConfirmationQuestion");
+          const dialog = document.querySelector("#delete-confirmation-dialog");
+          const question = dialog.querySelector("#delete-confirmation-question");
           question.textContent = "Are you sure you want to delete this agenda?";
           dialog.showModal();
           dialog.addEventListener("click", function agendaDeletion (e) {
-            if (e.target === document.querySelector("#confirmDelete")) {
+            if (e.target === document.querySelector("#confirm-delete")) {
               const previousAgenda = logic.getPreviousAgenda(agenda);
               const agendaId = agenda.getId();
               // delete if accepted
@@ -425,7 +425,7 @@ function loadPage () {
               dialog.close();
               deleteAgendaElement(agendaId);
               this.removeEventListener("click", agendaDeletion);
-            } else if (e.target === document.querySelector("#preventDelete")) {
+            } else if (e.target === document.querySelector("#prevent-delete")) {
               dialog.close();
               this.removeEventListener("click", agendaDeletion);
             }
@@ -471,11 +471,11 @@ function loadPage () {
       viewAgenda(newAgenda);
     })
   
-    const dialog = document.querySelector("#taskDialog");
+    const dialog = document.querySelector("#task-dialog");
   
     // TODO: set restrictions on the date input i.e. not before the current date etc.
     // probably using that npm libary as shown on the project page
-    const dateInput = dialog.querySelector("#taskDueDateInput");
+    const dateInput = dialog.querySelector("#task-due-date-input");
   
   
     const addTaskButton = document.querySelector("#add-task");
@@ -483,38 +483,42 @@ function loadPage () {
     addTaskButton.addEventListener("click", () => {
       dialog.showModal();
     })
-  
-    dialog.addEventListener("click", (e) => {
-      const form = document.querySelector("#taskForm");
-      if (e.target === document.querySelector("#submitTaskForm")) {
-        const title = document.querySelector("#taskNameInput").value;
-        let description = document.querySelector("#taskDescriptionInput").value;
-        description = description === "" ? null : description;
-        let dueDate = document.querySelector("#taskDueDateInput").value;
-        dueDate = dueDate === "" ? null : dueDate;
-        const priority = document.querySelector("#taskPriorityInput").value;
-        
 
-        let formType = document.querySelector("#formTypeInput").value;
+    dialog.addEventListener("submit", e => {
+      const form = document.querySelector("#task-form");
+      e.preventDefault();
+      const title = document.querySelector("#task-name-input").value;
+      let description = document.querySelector("#task-description-input").value;
+      description = description === "" ? null : description;
+      let dueDate = document.querySelector("#task-due-date-input").value;
+      dueDate = dueDate === "" ? null : dueDate;
+      const priority = document.querySelector("#task-priority-input").value;
+      
 
-        if (formType === "new-task") {
-          let task = logic.createNewTask(title, logic.getCurrentAgenda().getId(),
-          {priority, description, dueDate});
+      let formType = document.querySelector("#form-type-input").value;
+
+      if (formType === "new-task") {
+        let task = logic.createNewTask(title, logic.getCurrentAgenda().getId(),
+        {priority, description, dueDate});
+
+        createTaskElement(task);
+      } else if (formType === "edit-task") {
+        const agendaId = logic.getCurrentAgenda().getId(); 
+        const taskId = parseInt(document.querySelector("#form-task-id").value);
+        logic.editTask(agendaId, taskId, title, description, dueDate, priority);
+        updateTaskElement(agendaId, taskId);
+      }
+      
+      dialog.close(); 
+      form.reset();
+    })
   
-          createTaskElement(task);
-        } else if (formType === "edit-task") {
-          const agendaId = logic.getCurrentAgenda().getId(); 
-          const taskId = parseInt(document.querySelector("#formTaskId").value);
-          logic.editTask(agendaId, taskId, title, description, dueDate, priority);
-          updateTaskElement(agendaId, taskId);
-        }
-        
-        dialog.close(); 
-        form.reset();
-      } else if (e.target === document.querySelector("#cancelTaskForm")) {
+    dialog.addEventListener("click", e => {
+      const form = document.querySelector("#task-form");
+      if (e.target === document.querySelector("#cancel-task-form")) {
         dialog.close();
         form.reset();
-      } else if (e.target === document.querySelector("#clearTaskForm")) {
+      } else if (e.target === document.querySelector("#clear-task-form")) {
         form.reset();
       }
     })

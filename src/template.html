@@ -93,40 +93,40 @@
         <div id="add-task-container"><button id="add-task">New Task</button></div>
       </div>
     </div>
-    <dialog id="taskDialog">
-      <form id="taskForm">
+    <dialog id="task-dialog">
+      <form id="task-form">
         <div>
-          <input type="text" name="taskNameInput" id="taskNameInput" required>
-          <label for="taskNameInput">Title</label>
+          <input type="text" name="task-name-input" id="task-name-input" required>
+          <label for="task-name-input">Title</label>
         </div>
         <div>
-          <label for="taskDescriptionInput">Description</label>
-          <textarea name="taskDescriptionInput" id="taskDescriptionInput"></textarea>
+          <label for="task-description-input">Description</label>
+          <textarea name="task-description-input" id="task-description-input"></textarea>
         </div>
         <div>
-          <label for="taskDueDateInput">Due Date</label>
-          <input type="date" name="taskDueDateInput" id="taskDueDateInput">
+          <label for="task-due-date-input">Due Date</label>
+          <input type="date" name="task-due-date-input" id="task-due-date-input">
         </div>
         <div>
-          <label for="taskPriorityInput">Priority</label>
-          <select name="taskPriorityInput" id="taskPriorityInput">
+          <label for="task-priority-input">Priority</label>
+          <select name="task-priority-input" id="task-priority-input">
             <option value="Low" selected>Low</option>
             <option value="Important">Important</option>
             <option value="Urgent">Urgent</option>
           </select>
         </div>
-        <input type="hidden" name="formTypeInput" id="formTypeInput" value="new-task">
-        <input type="hidden" name="formTaskId" id="formTaskId">
-        <button type="button" id="submitTaskForm">Submit</button>
-        <button type="button" id="clearTaskForm">Clear</button>
-        <button type="button" id="cancelTaskForm">Cancel</button>
+        <input type="hidden" name="form-type-input" id="form-type-input" value="new-task">
+        <input type="hidden" name="form-task-id" id="form-task-id">
+        <button type="submit" id="submit-task-form">Submit</button>
+        <button type="button" id="clear-task-form">Clear</button>
+        <button type="button" id="cancel-task-form">Cancel</button>
       </form>
     </dialog>
-    <dialog id="deleteConfirmationDialog">
+    <dialog id="delete-confirmation-dialog">
       <div class="dialog-content-container">
-        <p id="deleteConfirmationQuestion"></p>
-        <button id="confirmDelete">Yes</button>
-        <button id="preventDelete">No</button>
+        <p id="delete-confirmation-question"></p>
+        <button id="confirm-delete">Yes</button>
+        <button id="prevent-delete">No</button>
       </div>
     </dialog>
     <dialog id="task-details-dialog">
