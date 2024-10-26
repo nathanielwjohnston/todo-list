@@ -85,18 +85,19 @@ body {
 
 #sidebar {
   padding: 0.6em;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 1fr auto;
   border-radius: 0.2rem;
   background-color: var(--purple);
+  overflow-y: hidden;
 }
 
 #agenda-list-container {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1em;
+  overflow-y: auto;
 }
 
 #agenda-list-container h2 {
@@ -105,10 +106,10 @@ body {
 }
 
 #agenda-list {
-  flex: 1;
   list-style-type: none;
   margin-bottom: 1em;
   color: var(--brown);
+  overflow-y: auto;
 }
 
 /* Agenda Items */
@@ -153,6 +154,9 @@ body {
 
 .agenda-item h3 {
   flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .agenda-edit-button {
@@ -236,6 +240,7 @@ body {
   padding: 1em;
   display: grid;
   grid-template-rows: 1fr 4fr;
+  overflow: hidden;
 }
 
 /* Header */
@@ -271,6 +276,7 @@ body {
   font-size: 1rem;
   position: absolute;
   color: red;
+  right: 35em;
 }
 
 #agenda-description {
@@ -310,15 +316,15 @@ body {
 /* Task List */
 
 #task-list-container {
+  display: grid;
+  grid-template-rows: 1fr;
   padding: 1em;
-  display: flex;
-  flex-direction: column;
+  overflow-y: hidden;
 }
 
 #task-list {
-  flex: 1;
   list-style-type: none;
-  overflow-y: scroll;
+  overflow-y: auto;
   padding: 0 1em;
 }
 
@@ -429,6 +435,11 @@ input[type="checkbox"]:focus {
 .task-edit-button:hover {
   cursor: pointer;
   background-image: url(../assets/pencil-outline-blue.svg);
+}
+
+.task-item.completed .task-edit-button:hover {
+  cursor: default;
+  background-image: url(../assets/pencil-outline-white.svg);
 }
 
 /* ========== */
@@ -661,6 +672,10 @@ label[for=task-name-input]:after {
 
 #task-description-input, #task-form input {
   padding: 0.1em 0.4em;
+}
+
+#task-priority-input:hover {
+  cursor: pointer;
 }
 
 #task-priority-input option {

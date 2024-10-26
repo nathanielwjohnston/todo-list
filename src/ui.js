@@ -126,6 +126,9 @@ function createTaskElement (task) {
   })
 
   editButton.addEventListener("click", () => {
+    if (task.getCompletionStatus()) {
+      return;
+    }
     document.querySelector("#form-type-input").value = "edit-task";
     document.querySelector("#form-task-id").value = taskId;
     document.querySelector("#task-name-input").value = task.getTitle();
@@ -270,10 +273,13 @@ const agendaEditor = (function () {
 
   function agendaPropertyTyping(e, element, maxChars) {
     const key = e.key;
-
+    const allowedKeys = [
+      "Shift", "End", "Home", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"
+    ]
+    console.log(element.textContent.length);
     if (
       element.textContent.length === maxChars &&
-      key !== "Backspace"
+       key !== "Backspace" && !allowedKeys.includes(key) 
     ) {
       e.preventDefault();
       element.classList.add("max-characters");
