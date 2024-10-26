@@ -1,5 +1,5 @@
 import * as logic from "./logic";
-import { format } from "date-fns";
+import { format } from "date-fns/format";
 
 function createAgendaElement (agenda) {
   const agendaList = document.querySelector("#agenda-list");
@@ -83,7 +83,7 @@ function createTaskElement (task) {
   })
 
   addNewElement(["task-title"], "span", containerDiv, `${task.getTitle()}`);
-  addNewElement(["task-due-date"], "span", containerDiv, `${format(task.getDueDate(), "dd/MM/yyyy")}`);
+  addNewElement(["task-due-date"], "span", containerDiv, `${task.getDueDate()}`);
   const detailsButton = addNewElement(["task-details-button"], "span", containerDiv, "Details");
   const editButton = addNewElement(["task-edit-button"], "span", containerDiv);
   const deleteButton = addNewElement(["task-delete-button"], "span", containerDiv);
@@ -105,7 +105,7 @@ function createTaskElement (task) {
     titleElement.textContent = task.getTitle();
     descriptionElement.textContent = task.getDescription();
     priorityElement.textContent = `Priority: ${taskPriority}`;
-    dateElement.textContent = format(task.getDueDate(), "dd/MM/yyyy");
+    dateElement.textContent = task.getDueDate();
     const elements = [descriptionElement, dateElement];
 
     for (let element of elements) {
@@ -130,7 +130,7 @@ function createTaskElement (task) {
     document.querySelector("#form-task-id").value = taskId;
     document.querySelector("#task-name-input").value = task.getTitle();
     document.querySelector("#task-description-input").value = task.getDescription();
-    document.querySelector("#task-due-date-input").value = task.getDueDate();
+    document.querySelector("#task-due-date-input").value = task.getDueDateForInput();
     document.querySelector("#task-priority-input").value = task.getPriority();
 
     const dialog = document.querySelector("#task-dialog");
@@ -498,6 +498,7 @@ function loadPage () {
   
     addTaskButton.addEventListener("click", () => {
       dialog.showModal();
+      document.querySelector("#form-type-input").value = "new-task";
     })
 
     dialog.addEventListener("submit", e => {

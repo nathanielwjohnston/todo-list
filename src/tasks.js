@@ -1,3 +1,5 @@
+import { format } from "date-fns/format";
+
 export const priorities = {lowPriority: "Low Priority", important: "Important", 
   urgent: "Urgent"};
 
@@ -17,7 +19,8 @@ export function createTask ({title, description=null, dueDate=null,
   const getDescription = () => description === null ? "" : description; 
   const updateDescription = (newDescription) => description = newDescription;
 
-  const getDueDate = () => dueDate === null ? "" : dueDate;
+  const getDueDate = () => dueDate === null ? "" : format(new Date(dueDate), "dd/MM/yyyy");
+  const getDueDateForInput = () => dueDate === null ? "" : format(new Date(dueDate), "yyyy-MM-dd");
   const updateDueDate = (newDueDate) => dueDate = newDueDate;
 
   const getPriority = () =>  priority;
@@ -29,7 +32,7 @@ export function createTask ({title, description=null, dueDate=null,
   const completeTask = () => completed = true;
 
   return { getId, getTitle, updateTitle, getDescription, updateDescription,
-    getDueDate, updateDueDate, getPriority, updatePriority, getCompletionStatus,
-    completeTask
+    getDueDate, getDueDateForInput, updateDueDate, getPriority, updatePriority,
+    getCompletionStatus, completeTask
    };
 }
