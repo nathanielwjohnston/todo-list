@@ -7,7 +7,7 @@ export const priorities = {lowPriority: "Low Priority", important: "Important",
 let currentTaskId = 0;
 
 export function createTask ({title, description=null, dueDate=null,
-  priority=priorities.lowPriority}) {
+  priority=priorities.lowPriority, completionStatus=false}) {
 
   // Set id to next available and then increment for next task
   const id = currentTaskId++;
@@ -31,7 +31,7 @@ export function createTask ({title, description=null, dueDate=null,
   const getPriority = () =>  priority;
   const updatePriority = (newPriority) => priority = newPriority;
 
-  let completed = false;
+  let completed = completionStatus;
 
   const getCompletionStatus = () => completed; 
   const completeTask = () => {

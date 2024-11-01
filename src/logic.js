@@ -92,10 +92,10 @@ function getPreviousAgenda (agenda) {
 }
 
 function createNewTask (title, agendaId, {description=null, dueDate=null,
-  priority=priorities.lowPriority}) {
+  priority=priorities.lowPriority, completionStatus=false}) {
 
     const task = createTask({title, description, dueDate,
-      priority});
+      priority, completionStatus});
     
     const agenda = getAgendaFromId(agendaId);
     agenda.addTask(task);

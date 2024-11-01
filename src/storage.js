@@ -149,11 +149,13 @@ export function loadStorage () {
 
   // Clear tasks from local storage
   localStorage.setItem("tasks", JSON.stringify([]));
+
   for (let task of tasks) {
     const agenda = agendas.find(agenda => agenda.taskIds.includes(task.id));
     // This function will also add the task to the required agenda
     logic.createNewTask(task.title, agenda.id, {description:task.description,
-      dueDate:task.dueDate, priority:task.priority
-    })
+      dueDate:task.dueDate, priority:task.priority,
+      completionStatus: task.completionStatus}
+    )
   }
 }
