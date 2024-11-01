@@ -1,28 +1,30 @@
 import { createTask, priorities } from "./tasks";
 import { createAgenda } from "./agendas";
 import { deleteTaskElement } from "./ui";
+import * as storage from "./storage";
 
-/* The display controller will be using these functions for information.
-   Therefore, the input will be mostly id-based */
+const agendas = [];
 
-// TODO: Add parse int to Ids in functions and remove from ui module
+let currentAgenda;
 
-// TODO: remove the need for agendaID with task functions, this should be done in logic
-// as it isn't always easy to do this in ui.
+function load () {
+  // Loads agendas and tasks, pushing them into the agendas array above
+  storage.loadStorage();
 
-const defaultAgenda = createAgenda();
+  // Check if there any agendas have been loaded from storage
+  if (agendas.length === 0) {
+    agendas.push(createAgenda());
+  }
 
-const agendas = [defaultAgenda];
-
-let currentAgenda = agendas[0];
+  // TODO: change to also be loaded?
+  currentAgenda = agendas[0];
+}
 
 function getAgendas () {
   return agendas;
 } 
 
 function createNewAgenda (name, description=null) {
-  // Add 9 agenda limit
-
   const agenda = createAgenda(name, description);
 
   agendas.push(agenda);
@@ -40,9 +42,11 @@ function removeAgenda (agendaId) {
     deleteTaskElement(task.getId());
   }
 
-  // remove from agendas array
+  // Remove from agendas array
   agendas.splice(agendas.indexOf(agenda), 1);
 
+  // Remove from storage
+  storage.removeAgenda(agendaId);
 }
 
 function getCurrentAgenda () {
@@ -70,6 +74,8 @@ function editAgenda (agendaId, name, description) {
   // submitting a form and therefore all values will be submitted even if not new
   agenda.updateName(name);
   agenda.updateDescription(description);
+
+  storage.editAgenda(agendaId, name, description);
 }
 
 function getPreviousAgenda (agenda) {  
@@ -109,6 +115,8 @@ function editTask (agendaId, taskId, title, description, dueDate,
     task.updateDescription(description);
     task.updateDueDate(dueDate);
     task.updatePriority(priority);
+
+    storage.editTask(taskId, title, description, dueDate, priority);
 }
 
 function removeTaskFromAgenda (agendaId, taskId) {
@@ -135,7 +143,7 @@ const getMaxCharacters = (function () {
   return { agendaHeader, agendaDescription, taskTitle }
 })();
 
-export { getAgendas, createNewAgenda, removeAgenda, getCurrentAgenda,
+export { load, getAgendas, createNewAgenda, removeAgenda, getCurrentAgenda,
   updateCurrentAgenda, getAgendaFromId, editAgenda, getPreviousAgenda, 
   createNewTask, getTaskFromId, editTask, removeTaskFromAgenda,
   getMaxCharacters

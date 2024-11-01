@@ -276,7 +276,6 @@ const agendaEditor = (function () {
     const allowedKeys = [
       "Shift", "End", "Home", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"
     ]
-    console.log(element.textContent.length);
     if (
       element.textContent.length === maxChars &&
        key !== "Backspace" && !allowedKeys.includes(key) 
@@ -384,14 +383,13 @@ function loadPage () {
 
   function loadAgendas () {
     const agendas = logic.getAgendas();
-  
+
     for (let agenda of agendas) {
       createAgendaElement(agenda);
     }
-  
+
     // Load an agenda (info and tasks)
-    // TODO: May need to eventually change this to current agenda when storing info
-    viewAgenda(logic.getAgendas()[0], true);
+    viewAgenda(logic.getCurrentAgenda(), true);
   }
 
   function loadEventListeners () {  
@@ -492,7 +490,6 @@ function loadPage () {
       else if (e.key === "Backspace" && title.classList.contains("max-characters")) {
         title.classList.remove("max-characters");
       }
-      console.log(title.textContent.length);
     })
 
     // Set restrictions on the date input

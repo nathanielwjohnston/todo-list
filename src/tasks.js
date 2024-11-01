@@ -1,4 +1,5 @@
 import { format } from "date-fns/format";
+import { completeTask as storageCompleteTask }  from "./storage";
 
 export const priorities = {lowPriority: "Low Priority", important: "Important", 
   urgent: "Urgent"};
@@ -19,9 +20,13 @@ export function createTask ({title, description=null, dueDate=null,
   const getDescription = () => description === null ? "" : description; 
   const updateDescription = (newDescription) => description = newDescription;
 
-  const getDueDate = () => dueDate === null ? "" : format(new Date(dueDate), "dd/MM/yyyy");
-  const getDueDateForInput = () => dueDate === null ? "" : format(new Date(dueDate), "yyyy-MM-dd");
-  const updateDueDate = (newDueDate) => dueDate = newDueDate;
+  const getDueDate = () => {
+    return (dueDate === null || dueDate === "") ? "" : format(new Date(dueDate), "dd/MM/yyyy");
+  } 
+  const getDueDateForInput = () => {
+    return (dueDate === null || dueDate === "") ? "" : format(new Date(dueDate), "yyyy-MM-dd");
+  }
+  const updateDueDate = (newDueDate) => dueDate = format(new Date(newDueDate), "dd/MM/yyyy");
 
   const getPriority = () =>  priority;
   const updatePriority = (newPriority) => priority = newPriority;
@@ -29,7 +34,10 @@ export function createTask ({title, description=null, dueDate=null,
   let completed = false;
 
   const getCompletionStatus = () => completed; 
-  const completeTask = () => completed = true;
+  const completeTask = () => {
+    completed = true;
+    storageCompleteTask(id);
+  };
 
   return { getId, getTitle, updateTitle, getDescription, updateDescription,
     getDueDate, getDueDateForInput, updateDueDate, getPriority, updatePriority,
