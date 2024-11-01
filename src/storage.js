@@ -122,7 +122,14 @@ export function completeTask (id) {
   localStorage.setItem("tasks", JSON.stringify(updatedTasks));
 }
 
-//
+export function saveCurrentAgenda (id) {
+  localStorage.setItem("currentAgenda", JSON.stringify({id}));
+}
+
+export function getSavedCurrentAgendaId () {
+  const agenda = JSON.parse(localStorage.getItem("currentAgenda"));
+  return agenda.id;
+}
 
 export function loadStorage () {
   // Load Agendas

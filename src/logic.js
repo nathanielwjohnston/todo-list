@@ -16,8 +16,8 @@ function load () {
     agendas.push(createAgenda());
   }
 
-  // TODO: change to also be loaded?
-  currentAgenda = agendas[0];
+  // Use the last current agenda before page reload or the default agenda
+  currentAgenda = getAgendaFromId(storage.getSavedCurrentAgendaId()) || agendas[0];
 }
 
 function getAgendas () {
@@ -60,6 +60,8 @@ function getCurrentAgenda () {
 
 function updateCurrentAgenda (newCurrentAgenda) {
   currentAgenda = newCurrentAgenda;
+
+  storage.saveCurrentAgenda(currentAgenda.getId());
 }
 
 function getAgendaFromId (agendaId) {
