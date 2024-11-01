@@ -1,11 +1,6 @@
 import * as logic from "./logic";
 import { format } from "date-fns/format";
 
-// Should all these functions first of all check if what they are receiving 
-// from local storage actually exists? Probably yes
-
-// Should I remove some of these functions from agendas.js and tasks.js and
-// instead put them in logic?
 
 export function saveAgenda (id, name, description) {
   let agendas;
@@ -72,7 +67,6 @@ export function removeTaskFromAgenda (taskId, agendaId) {
 
   const updatedAgendas = agendas.filter(agenda => agenda.id !== agendaId);
 
-  // Could use splice - leaving this here just in case
   const updatedTasks = agenda.taskIds.filter(id => id !== taskId);
 
   updatedAgendas.push({id: agenda.id, name: agenda.name,

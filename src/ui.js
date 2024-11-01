@@ -67,7 +67,7 @@ function createTaskElement (task) {
 
   const checkbox = addNewElement(["task-check"], "input", checkContainer);
   checkbox.type = "checkbox";
-  // check complete status
+  // Check complete status
   if (task.getCompletionStatus()) {
     listItem.classList.add("completed");
     checkbox.checked = true;
@@ -276,9 +276,17 @@ const agendaEditor = (function () {
     const allowedKeys = [
       "Shift", "End", "Home", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"
     ]
+
+    // As it is being edited, the elements will always technically be selected,
+    // but will show up as an empty string, which will be checked
+
+    // If no text is highlighted, the string will be empty and therefore not
+    // selected when put against my criteria rather than getSelection()
+    const selected = window.getSelection().toString() !== "";
+
     if (
       element.textContent.length === maxChars &&
-       key !== "Backspace" && !allowedKeys.includes(key) 
+       key !== "Backspace" && !allowedKeys.includes(key) && !selected
     ) {
       e.preventDefault();
       element.classList.add("max-characters");
@@ -286,7 +294,7 @@ const agendaEditor = (function () {
 
     if (
       element.textContent.length === maxChars &&
-      key === "Backspace" &&
+      ( key === "Backspace" || selected) &&
       element.classList.contains("max-characters")
     ) {
       element.classList.remove("max-characters");
@@ -418,7 +426,7 @@ function loadPage () {
             if (e.target === document.querySelector("#confirm-delete")) {
               const previousAgenda = logic.getPreviousAgenda(agenda);
               const agendaId = agenda.getId();
-              // delete if accepted
+              // Delete if accepted
               logic.removeAgenda(agendaId);
 
               if (previousAgenda) {
@@ -467,7 +475,7 @@ function loadPage () {
     const addAgendaButton = document.querySelector("#add-agenda");
   
     addAgendaButton.addEventListener("click", () => {
-      // create empty agenda and switch to it
+      // Create empty agenda and switch to it
   
       const newAgenda = logic.createNewAgenda();
   

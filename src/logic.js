@@ -33,7 +33,7 @@ function createNewAgenda (name, description=null) {
 }
 
 function removeAgenda (agendaId) {
-  // get specified agenda
+  // Get specified agenda
   const agenda = getAgendaFromId(agendaId);
 
   const tasks = agenda.getTasks();
@@ -50,7 +50,7 @@ function removeAgenda (agendaId) {
 }
 
 function getCurrentAgenda () {
-  // check current agenda still exists
+  // Check current agenda still exists
   if (agendas.includes(currentAgenda)) {
     return currentAgenda;
   } else {
@@ -69,11 +69,11 @@ function getAgendaFromId (agendaId) {
   return agendas.find((agenda) => agenda.getId() === id);
 }
 
-// to edit the base parameters of an agenda i.e. name and description
+// To edit the base parameters of an agenda i.e. name and description
 function editAgenda (agendaId, name, description) {
   const agenda = getAgendaFromId(agendaId);
 
-  // submitting a form and therefore all values will be submitted even if not new
+  // Submitting a form and therefore all values will be submitted even if not new
   agenda.updateName(name);
   agenda.updateDescription(description);
 
