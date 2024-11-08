@@ -2,40 +2,48 @@ import * as logic from "./logic";
 import { format } from "date-fns/format";
 
 const agendaStorage = (function () {
-  const agendas = JSON.parse(localStorage.getItem("agendas"));
+  function getAgendas () {
+    return JSON.parse(localStorage.getItem("agendas"));
+  }
 
   function getAgenda (id) {
+    const agendas = getAgendas();
     return agendas.find(agenda => agenda.id === id);
   }
 
   // Returns array of agendas WITHOUT the agenda linked to the provided id
   function getUpdatedAgendas (id) {
+    const agendas = getAgendas();
     return agendas.filter(agenda => agenda.id !== id);
   }
 
-  return { agendas, getAgenda, getUpdatedAgendas }
+  return { getAgendas, getAgenda, getUpdatedAgendas }
 })();
 
 const taskStorage = (function () {
-  const tasks = JSON.parse(localStorage.getItem("tasks"));
+  function getTasks () {
+    return JSON.parse(localStorage.getItem("tasks"));
+  }
 
   function getTask (id) {
+    const tasks = getTasks();
     return tasks.find(task => task.id === id);
   }
 
   // Returns array of tasks WITHOUT the task linked to the provided id
   function getUpdatedTasks (id) {
+    const tasks = getTasks();
     return tasks.filter(task => task.id !== id);
   }
 
-  return { tasks, getTask, getUpdatedTasks }
+  return { getTasks, getTask, getUpdatedTasks }
 })();
 
 export function saveAgenda (id, name, description) {
   let agendas;
 
   if (localStorage.getItem("agendas")) {
-    agendas = agendaStorage.agendas;
+    agendas = agendaStorage.getAgendas();
   } else {
     agendas = [];
   }
@@ -56,7 +64,7 @@ export function saveTask (id, title, description, dueDate, priority,
   let tasks;
 
   if (localStorage.getItem("tasks")) {
-    tasks = taskStorage.tasks;
+    tasks = taskStorage.getTasks();
   } else {
     tasks = [];
   }
@@ -77,7 +85,7 @@ export function saveTaskToAgenda (taskId, agendaId) {
   localStorage.setItem("agendas", JSON.stringify(updatedAgendas));
 }
 
-export function removeTask (id) {
+export function removeTask () {
   const updatedTasks = taskStorage.getUpdatedTasks();
 
   localStorage.setItem("tasks", JSON.stringify(updatedTasks));
@@ -136,13 +144,20 @@ export function saveCurrentAgenda (id) {
 }
 
 export function getSavedCurrentAgendaId () {
-  const agenda = JSON.parse(localStorage.getItem("currentAgenda"));
+  let agenda;
+  if (!localStorage.getItem("currentAgenda")) {
+    return false;
+  }
+  agenda = JSON.parse(localStorage.getItem("currentAgenda"));
   return agenda.id;
 }
 
 export function loadStorage () {
   // Load Agendas
-  const agendas = agendaStorage.agendas;
+  
+  const agendas = agendaStorage.getAgendas();
+
+  console.log(agendas);
 
   if (!agendas) {
     return;
@@ -156,7 +171,7 @@ export function loadStorage () {
   }
 
   // Load Tasks
-  const tasks = taskStorage.tasks;
+  const tasks = taskStorage.getTasks();
 
   if (!tasks) {
     return;
