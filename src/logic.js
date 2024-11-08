@@ -41,6 +41,7 @@ function removeAgenda (agendaId) {
   for (let task of tasks) {
     agenda.removeTask(task);
     deleteTaskElement(task.getId());
+    storage.removeTask(task.getId());
   }
 
   // Remove from agendas array
@@ -89,6 +90,17 @@ function getPreviousAgenda (agenda) {
     return null;
   } else {
     return agendas[previousIndex];
+  }
+}
+
+function getNextAgenda (agenda) {
+  const agendaIndex = agendas.indexOf(agenda);
+  const nextIndex = agendaIndex + 1;
+  if (!agendas[nextIndex]) {
+    // No more agendas
+    return null;
+  } else {
+    return agendas[nextIndex];
   }
 }
 
@@ -147,7 +159,7 @@ const getMaxCharacters = (function () {
 })();
 
 export { load, getAgendas, createNewAgenda, removeAgenda, getCurrentAgenda,
-  updateCurrentAgenda, getAgendaFromId, editAgenda, getPreviousAgenda, 
-  createNewTask, getTaskFromId, editTask, removeTaskFromAgenda,
+  updateCurrentAgenda, getAgendaFromId, editAgenda, getPreviousAgenda,
+  getNextAgenda, createNewTask, getTaskFromId, editTask, removeTaskFromAgenda,
   getMaxCharacters
  }

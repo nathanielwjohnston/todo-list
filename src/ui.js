@@ -425,12 +425,15 @@ function loadPage () {
           dialog.addEventListener("click", function agendaDeletion (e) {
             if (e.target === document.querySelector("#confirm-delete")) {
               const previousAgenda = logic.getPreviousAgenda(agenda);
+              const nextAgenda = logic.getNextAgenda(agenda);
               const agendaId = agenda.getId();
               // Delete if accepted
               logic.removeAgenda(agendaId);
 
               if (previousAgenda) {
                 viewAgenda(previousAgenda);
+              } else if (nextAgenda) {
+                viewAgenda(nextAgenda);
               } else {
                 // No Agenda Page
                 loadBlankAgenda();
