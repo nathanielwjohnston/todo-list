@@ -20,7 +20,7 @@ export function createAgenda (name=null, description=null) {
   const addTask = (task) => {
     tasks.push(task);
     storage.saveTask(task.getId(), task.getTitle(), task.getDescription(),
-      task.getDueDate(), task.getPriority(), task.getCompletionStatus());
+      task.getDueDateForInput(), task.getPriority(), task.getCompletionStatus());
     storage.saveTaskToAgenda(task.getId(), id);
   };
   const removeTask = (task) => {

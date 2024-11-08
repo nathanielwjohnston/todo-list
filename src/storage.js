@@ -119,7 +119,7 @@ export function editTask (id, title, description, dueDate, priority) {
   let formattedDate;
 
   if (dueDate) {
-    formattedDate = format(new Date(dueDate), "dd/MM/yyyy");
+    formattedDate = format(new Date(dueDate), "yyyy-MM-dd");
   } else {
     formattedDate = "";
   }
@@ -169,7 +169,14 @@ export function loadStorage () {
   // Clear agendas from local storage
   localStorage.setItem("agendas", JSON.stringify([]));
 
-  for (let agenda of agendas) {
+  const sortedAgendas = agendas.sort((firstAgenda, secondAgenda) => {
+    // Want to sort by id from smallest to largest
+    // if -ve, i.e. if the second is larger, the first agenda is sorted first
+    // and vice versa
+    return firstAgenda.id - secondAgenda.id;
+  })
+
+  for (let agenda of sortedAgendas) {
     
     const newAgenda = logic.createNewAgenda(agenda.name, agenda.description);
 
@@ -192,8 +199,11 @@ export function loadStorage () {
   // Clear tasks from local storage
   localStorage.setItem("tasks", JSON.stringify([]));
 
-  for (let task of tasks) {
-    const agenda = agendas.find(agenda => agenda.taskIds.includes(task.id));
+  // Sorted like the agendas above
+  const sortedTasks = tasks.sort((firstTask, secondTask) => firstTask.id - secondTask.id);
+
+  for (let task of sortedTasks) {
+    const agenda = sortedAgendas.find(agenda => agenda.taskIds.includes(task.id));
     // This function will also add the task to the required agenda
     logic.createNewTask(task.title, agenda.id, {description:task.description,
       dueDate:task.dueDate, priority:task.priority,

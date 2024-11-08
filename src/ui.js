@@ -521,7 +521,6 @@ function loadPage () {
       let dueDate = document.querySelector("#task-due-date-input").value;
       dueDate = dueDate === "" ? null : dueDate;
       const priority = document.querySelector("#task-priority-input").value;
-      
 
       let formType = document.querySelector("#form-type-input").value;
 
