@@ -26,7 +26,13 @@ export function createTask ({title, description=null, dueDate=null,
   const getDueDateForInput = () => {
     return (dueDate === null || dueDate === "") ? "" : format(new Date(dueDate), "yyyy-MM-dd");
   }
-  const updateDueDate = (newDueDate) => dueDate = format(new Date(newDueDate), "dd/MM/yyyy");
+  const updateDueDate = (newDueDate) => {
+    if (!newDueDate || newDueDate === "") {
+      dueDate = "";
+    } else {
+      dueDate = new Date(newDueDate);
+    }
+  }
 
   const getPriority = () =>  priority;
   const updatePriority = (newPriority) => priority = newPriority;

@@ -116,12 +116,17 @@ export function editAgenda (id, name, description) {
 
 export function editTask (id, title, description, dueDate, priority) {
   const updatedTasks = taskStorage.getUpdatedTasks(id);
+  let formattedDate;
 
-  const formattedDate = format(new Date(dueDate), "dd/MM/yyyy");
+  if (dueDate) {
+    formattedDate = format(new Date(dueDate), "dd/MM/yyyy");
+  } else {
+    formattedDate = "";
+  }
 
   // If editing, completion status will have to be false (otherwise editing is
   // not allowed)
-  updatedTasks.push({id, title, description, formattedDate, priority,
+  updatedTasks.push({id, title, description, dueDate: formattedDate, priority,
     completionStatus: false});
 
   localStorage.setItem("tasks", JSON.stringify(updatedTasks));
@@ -156,8 +161,6 @@ export function loadStorage () {
   // Load Agendas
   
   const agendas = agendaStorage.getAgendas();
-
-  console.log(agendas);
 
   if (!agendas) {
     return;

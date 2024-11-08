@@ -2,6 +2,7 @@ import { createTask, priorities } from "./tasks";
 import { createAgenda } from "./agendas";
 import { deleteTaskElement } from "./ui";
 import * as storage from "./storage";
+import { format } from "date-fns/format";
 
 const agendas = [];
 
@@ -110,7 +111,7 @@ function getTaskFromId (agendaId, taskId) {
 
 function editTask (agendaId, taskId, title, description, dueDate,
   priority) {
-  
+
     const task = getTaskFromId(agendaId, taskId);
 
     task.updateTitle(title);
