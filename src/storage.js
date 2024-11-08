@@ -85,8 +85,8 @@ export function saveTaskToAgenda (taskId, agendaId) {
   localStorage.setItem("agendas", JSON.stringify(updatedAgendas));
 }
 
-export function removeTask () {
-  const updatedTasks = taskStorage.getUpdatedTasks();
+export function removeTask (id) {
+  const updatedTasks = taskStorage.getUpdatedTasks(id);
 
   localStorage.setItem("tasks", JSON.stringify(updatedTasks));
 }
@@ -167,7 +167,16 @@ export function loadStorage () {
   localStorage.setItem("agendas", JSON.stringify([]));
 
   for (let agenda of agendas) {
-    logic.createNewAgenda(agenda.name, agenda.description);
+    
+    const newAgenda = logic.createNewAgenda(agenda.name, agenda.description);
+
+    // Need to update the agendas array with new id when re-assigning tasks below
+    agenda.id = newAgenda.getId();
+    // If this isn't done, the agenda id set to each task will be referencing
+    // from before the page was loaded even though the agendas have new ids.
+
+    // Ideally ids would be getting updated every time an agenda is replaced
+    // in local storage (i.e. updated etc.), but I am satisfied at this point
   }
 
   // Load Tasks
